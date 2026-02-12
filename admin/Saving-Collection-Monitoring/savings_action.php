@@ -27,42 +27,41 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $params = [];
     $types = '';
 
-    // Search logic (safe)
-    if ($search !== '') {
-        if ($search_by === 'auto') {
-            if (preg_match('/^\d+$/', $search)) {
-                $where[] = "s.member_id = ?";
-                $params[] = intval($search);
-                $types .= 'i';
-            } else {
-                $where[] = "(CAST(s.member_id AS CHAR) LIKE ? OR s.transaction_type LIKE ? OR s.transaction_date LIKE ?)";
-                $s = "%$search%";
-                $params[] = $s; $params[] = $s; $params[] = $s;
-                $types .= 'sss';
-            }
-        } elseif ($search_by === 'member_id') {
-            if (preg_match('/^\d+$/', $search)) {
-                $where[] = "s.member_id = ?";
-                $params[] = intval($search);
-                $types .= 'i';
-            } else {
-                $where[] = "1=0";
-            }
-        } elseif ($search_by === 'transaction_type') {
+// Search logic (bulletproof)
+if ($search !== '') {
+
+    // If input is pure number: ALWAYS exact member_id match
+    if (preg_match('/^\d+$/', $search)) {
+        $where[] = "s.member_id = ?";
+        $params[] = intval($search);
+        $types .= 'i';
+    } else {
+
+        // If not number: use dropdown logic
+        if ($search_by === 'transaction_type') {
             $where[] = "s.transaction_type LIKE ?";
             $params[] = "%$search%";
             $types .= 's';
+
         } elseif ($search_by === 'transaction_date') {
             $where[] = "s.transaction_date LIKE ?";
             $params[] = "%$search%";
             $types .= 's';
+
         } elseif ($search_by === 'recorded_by_name') {
-            // Safe even without join for summary: use subquery
             $where[] = "s.recorded_by IN (SELECT user_id FROM users WHERE full_name LIKE ?)";
             $params[] = "%$search%";
             $types .= 's';
+
+        } else {
+            // auto / member_id / unknown = fallback to your old partial search
+            $where[] = "(CAST(s.member_id AS CHAR) LIKE ? OR s.transaction_type LIKE ? OR s.transaction_date LIKE ?)";
+            $s = "%$search%";
+            $params[] = $s; $params[] = $s; $params[] = $s;
+            $types .= 'sss';
         }
     }
+}
 
     if ($filter === 'deposit') $where[] = "s.transaction_type='Deposit'";
     elseif ($filter === 'withdrawal') $where[] = "s.transaction_type='Withdrawal'";
