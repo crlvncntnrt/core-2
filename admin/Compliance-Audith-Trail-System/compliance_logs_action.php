@@ -100,6 +100,9 @@ function loadTCPDF() {
     return false;
 }
 
+
+
+
 // Handle CSV Export
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     try {
@@ -209,17 +212,40 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         error_log("TCPDF library not found in any expected location");
         header('Content-Type: application/json');
         echo json_encode([
-            'status' => 'error', 
-            'msg' => 'PDF library not available. Please use CSV export or install TCPDF via Composer: composer require tecnickcom/tcpdf'
+            'status' => 'error',
+            'message' => 'Export failed. PDF library not found. No composer needed if you place TCPDF at: admin/libs/tcpdf/tcpdf.php',
+            'msg' => 'Export failed. PDF library not found. No composer needed if you place TCPDF at: admin/libs/tcpdf/tcpdf.php'
         ]);
         exit;
     }
     
+    if (!class_exists('ComplianceExportPDF', false)) {
+        class ComplianceExportPDF extends TCPDF {
+            public function Footer() {
+                $this->SetY(-12);
+                $this->SetFont('helvetica', 'I', 8);
+                $this->SetTextColor(120, 120, 120);
+                $this->Cell(0, 8, 'Confidential - Compliance Monitoring - Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, 0, 'C');
+            }
+        }
+    }
+
     try {
         $search = trim($_GET['search'] ?? '');
         $start = trim($_GET['start'] ?? '');
         $end = trim($_GET['end'] ?? '');
         $status = trim($_GET['status'] ?? '');
+        $pdfPassword = trim($_GET['pdf_password'] ?? '');
+
+        if (strlen($pdfPassword) < 6) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Export failed. PDF password must be at least 6 characters.',
+                'msg' => 'Export failed. PDF password must be at least 6 characters.'
+            ]);
+            exit;
+        }
 
         // Build WHERE clause
         $filterData = buildWhereClause($search, $start, $end, $status);
@@ -263,36 +289,52 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         $result = $stmt->get_result();
 
         // Create PDF using TCPDF
-        $pdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8', false);
-        
+        $pdf = new ComplianceExportPDF('L', 'mm', 'A4', true, 'UTF-8', false);
+
         $pdf->SetCreator('Compliance System');
         $pdf->SetAuthor('Admin');
         $pdf->SetTitle('Compliance & Audit Trail Logs');
         $pdf->SetSubject('Audit Trail Report');
-        
-        $pdf->SetMargins(10, 15, 10);
+
+        // Security: require password before opening exported PDF
+        $pdf->SetProtection(['print', 'copy'], $pdfPassword, null, 0, null);
+
+        $pdf->SetMargins(10, 12, 10);
         $pdf->SetAutoPageBreak(TRUE, 15);
         $pdf->AddPage();
-        
-        // Header
-        $pdf->SetFont('helvetica', 'B', 16);
-        $pdf->Cell(0, 10, 'Compliance & Audit Trail Logs', 0, 1, 'C');
-        
+
+        // Designed header card
+        $pdf->SetFillColor(15, 23, 42);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetDrawColor(15, 23, 42);
+        $pdf->RoundedRect(10, 8, 277, 18, 2, '1111', 'FD');
+
+        $pdf->SetY(11);
+        $pdf->SetFont('helvetica', 'B', 14);
+        $pdf->Cell(0, 6, 'Compliance & Audit Trail Logs', 0, 1, 'C');
+
         $pdf->SetFont('helvetica', '', 9);
-        $pdf->Cell(0, 5, 'Generated: ' . date('Y-m-d H:i:s'), 0, 1, 'C');
-        
-        if ($start && $end) {
-            $pdf->Cell(0, 5, 'Period: ' . htmlspecialchars($start, ENT_QUOTES, 'UTF-8') . ' to ' . htmlspecialchars($end, ENT_QUOTES, 'UTF-8'), 0, 1, 'C');
-        }
-        if ($status) {
-            $pdf->Cell(0, 5, 'Status: ' . htmlspecialchars($status, ENT_QUOTES, 'UTF-8'), 0, 1, 'C');
-        }
-        
-        $pdf->Ln(5);
-        
+        $pdf->Cell(0, 4, 'Generated: ' . date('Y-m-d H:i:s'), 0, 1, 'C');
+
+        $pdf->Ln(2);
+        $pdf->SetTextColor(40, 40, 40);
+        $pdf->SetFillColor(239, 246, 255);
+
+        $periodText = ($start && $end)
+            ? ('Period: ' . htmlspecialchars($start, ENT_QUOTES, 'UTF-8') . ' to ' . htmlspecialchars($end, ENT_QUOTES, 'UTF-8'))
+            : 'Period: All Dates';
+        $statusText = $status
+            ? ('Status: ' . htmlspecialchars($status, ENT_QUOTES, 'UTF-8'))
+            : 'Status: All';
+
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->Cell(138.5, 7, $periodText, 0, 0, 'L', true);
+        $pdf->Cell(138.5, 7, $statusText, 0, 1, 'R', true);
+        $pdf->Ln(3);
+
         // Table header
         $pdf->SetFont('helvetica', 'B', 8);
-        $pdf->SetFillColor(52, 58, 64);
+        $pdf->SetFillColor(30, 64, 175);
         $pdf->SetTextColor(255, 255, 255);
         
         $pdf->Cell(10, 7, '#', 1, 0, 'C', true);
@@ -312,7 +354,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         while ($row = $result->fetch_assoc()) {
             $fill = ($n % 2 == 0);
             if ($fill) {
-                $pdf->SetFillColor(248, 249, 250);
+                $pdf->SetFillColor(241, 245, 249);
             }
             
             $user = $row['full_name'] ?? $row['username'] ?? 'System';
@@ -334,7 +376,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         }
         
         $stmt->close();
-        
+
         // Output PDF
         $filename = 'compliance_logs_' . date('Y-m-d_His') . '.pdf';
         $pdf->Output($filename, 'D');
