@@ -11,7 +11,6 @@ include(__DIR__ . '/../inc/navbar.php');
 include(__DIR__ . '/../inc/sidebar.php');
 ?>
 
-<!-- Add jsPDF Libraries for PDF Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
@@ -34,7 +33,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         background: #f9fafb;
     }
 
-    /* Enhanced Header */
     .page-header {
         background: linear-gradient(135deg, var(--brand-primary) 0%, #047857 100%);
         padding: 2rem;
@@ -57,7 +55,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         margin-top: 0.25rem;
     }
 
-    /* Enhanced Stat Cards */
     .stat-card {
         padding: 1.75rem;
         border-radius: 1rem;
@@ -149,7 +146,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         gap: 0.25rem;
     }
 
-    /* Card color schemes */
     .stat-card[data-filter="all"] {
         --card-color-1: #3b82f6;
         --card-color-2: #2563eb;
@@ -170,7 +166,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         --card-color-2: #7c3aed;
     }
 
-    /* Enhanced Filter Section */
     .filter-section {
         background: white;
         padding: 1.5rem;
@@ -202,7 +197,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
     }
 
-    /* Enhanced Table */
     .table-card {
         background: white;
         padding: 1.5rem;
@@ -253,10 +247,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         margin-bottom: 0;
     }
 
-    .table thead {
-        background: #1f2937;
-    }
-
     .table thead th {
         color: #1f2937 !important;
         font-weight: 700;
@@ -302,7 +292,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         color: white;
     }
 
-    /* Enhanced Buttons */
     .btn {
         border-radius: 0.5rem;
         font-weight: 600;
@@ -324,85 +313,16 @@ include(__DIR__ . '/../inc/sidebar.php');
         font-size: 0.875rem;
     }
 
-    .btn-outline-success {
-        border: 2px solid var(--brand-primary);
-        color: var(--brand-primary);
-    }
-
-    .btn-outline-success:hover {
-        background: var(--brand-primary);
-        border-color: var(--brand-primary);
-        color: white;
-    }
-
-    .btn-danger {
-        background: linear-gradient(135deg, #ef4444, #dc2626);
-        border: none;
-    }
-
-    .btn-success {
-        background: linear-gradient(135deg, #10b981, #059669);
-        border: none;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
-        border: none;
-    }
-
-    .btn-outline-primary {
-        border: 2px solid #3b82f6;
-        color: #3b82f6;
-    }
-
-    .btn-outline-primary:hover {
-        background: #3b82f6;
-        color: white;
-    }
-
-    .btn-info {
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
-        border: none;
-    }
-
-    .btn-outline-light {
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        color: white;
-    }
-
-    .btn-outline-light:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: white;
-        color: white;
-    }
-
-    .btn-outline-secondary {
-        border: 2px solid #6b7280;
-        color: #6b7280;
-    }
-
-    .btn-outline-secondary:hover {
-        background: #6b7280;
-        color: white;
-    }
-
-    /* Sync button animation */
     .btn-sync.syncing .bi-arrow-repeat {
         display: inline-block;
         animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
 
-    /* Pagination */
     .pagination-wrapper {
         display: flex;
         justify-content: space-between;
@@ -422,7 +342,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         margin-left: 0.5rem;
     }
 
-    /* Modal Enhancements */
     .modal-content {
         border-radius: 1rem;
         border: none;
@@ -446,30 +365,20 @@ include(__DIR__ . '/../inc/sidebar.php');
         border-top: 2px solid #f3f4f6;
     }
 
-    /* Toast notification */
     #syncToast {
         animation: slideInRight 0.3s ease;
     }
 
     @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
     }
 
-    /* Loading state */
     .spinner-border-sm {
         width: 1rem;
         height: 1rem;
     }
 
-    /* NEW: Breakdown Modal Styles */
     .bg-gradient-primary {
         background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
     }
@@ -489,31 +398,18 @@ include(__DIR__ . '/../inc/sidebar.php');
         font-size: 0.8125rem;
     }
 
-    /* Responsive improvements */
     @media (max-width: 768px) {
-        .page-header {
-            padding: 1.5rem;
-        }
-
-        .stat-card {
-            padding: 1.25rem;
-        }
-
-        .stat-value {
-            font-size: 1.75rem;
-        }
-
-        .filter-section {
-            padding: 1rem;
-        }
+        .page-header { padding: 1.5rem; }
+        .stat-card { padding: 1.25rem; }
+        .stat-value { font-size: 1.75rem; }
+        .filter-section { padding: 1rem; }
     }
 </style>
 
 <div class="main-wrap">
     <main class="main-content" id="main-content">
         <div class="container-fluid py-4">
-            
-            <!-- Enhanced Header -->
+
             <div class="page-header">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
@@ -537,65 +433,58 @@ include(__DIR__ . '/../inc/sidebar.php');
                 </div>
             </div>
 
-            <!-- Enhanced Summary Cards -->
             <div class="row g-4 mb-4">
                 <div class="col-md-3">
                     <div class="card stat-card" data-filter="all">
-                        <div class="stat-card-icon">
-                            <i class="bi bi-list-ul"></i>
-                        </div>
+                        <div class="stat-card-icon"><i class="bi bi-list-ul"></i></div>
                         <div class="stat-title">Total Transactions</div>
                         <div id="card_total_tx" class="stat-value">0</div>
-                        <div class="stat-hint">
-                            <i class="bi bi-hand-index"></i> Click to view all
-                        </div>
+                        <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to view all</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card stat-card" data-filter="deposit">
-                        <div class="stat-card-icon">
-                            <i class="bi bi-arrow-down-circle"></i>
-                        </div>
+                        <div class="stat-card-icon"><i class="bi bi-arrow-down-circle"></i></div>
                         <div class="stat-title">Total Deposits</div>
                         <div id="card_total_deposit" class="stat-value">0</div>
-                        <div class="stat-hint">
-                            <i class="bi bi-hand-index"></i> Click to filter
-                        </div>
+                        <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to filter</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card stat-card" data-filter="withdrawal">
-                        <div class="stat-card-icon">
-                            <i class="bi bi-arrow-up-circle"></i>
-                        </div>
+                        <div class="stat-card-icon"><i class="bi bi-arrow-up-circle"></i></div>
                         <div class="stat-title">Total Withdrawals</div>
                         <div id="card_total_withdraw" class="stat-value">0</div>
-                        <div class="stat-hint">
-                            <i class="bi bi-hand-index"></i> Click to filter
-                        </div>
+                        <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to filter</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card stat-card" data-filter="balance">
-                        <div class="stat-card-icon">
-                            <i class="bi bi-wallet2"></i>
-                        </div>
+                        <div class="stat-card-icon"><i class="bi bi-wallet2"></i></div>
                         <div class="stat-title">Current Balance</div>
                         <div id="card_balance" class="stat-value">₱0.00</div>
-                        <div class="stat-hint">
-                            <i class="bi bi-info-circle"></i> Latest balance
-                        </div>
+                        <div class="stat-hint"><i class="bi bi-info-circle"></i> Latest balance</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Enhanced Filters Section -->
             <div class="filter-section">
                 <div class="row g-3 align-items-end">
+
                     <div class="col-md-4">
                         <label class="form-label">Search</label>
-                        <input id="searchInput" class="form-control" placeholder="Search by member ID, type, or date...">
+                        <div class="input-group">
+                            <select id="searchBy" class="form-select" style="max-width: 150px;">
+                                <option value="auto" selected>Auto</option>
+                                <option value="member_id">Member ID</option>
+                                <option value="transaction_type">Type</option>
+                                <option value="transaction_date">Date</option>
+                                <option value="recorded_by_name">Recorded By</option>
+                            </select>
+                            <input id="searchInput" class="form-control" placeholder="Type here...">
+                        </div>
                     </div>
+
                     <div class="col-md-2">
                         <label class="form-label">Transaction Type</label>
                         <select id="typeFilter" class="form-select">
@@ -604,14 +493,31 @@ include(__DIR__ . '/../inc/sidebar.php');
                             <option value="Withdrawal">Withdrawal</option>
                         </select>
                     </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Member</label>
+                        <select id="memberFilter" class="form-select">
+                            <option value="">All Members</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Recorded By</label>
+                        <select id="recordedByFilter" class="form-select">
+                            <option value="">All Users</option>
+                        </select>
+                    </div>
+
                     <div class="col-md-2">
                         <label class="form-label">Date From</label>
                         <input type="date" id="dateFrom" class="form-control">
                     </div>
+
                     <div class="col-md-2">
                         <label class="form-label">Date To</label>
                         <input type="date" id="dateTo" class="form-control">
                     </div>
+
                     <div class="col-md-1">
                         <label class="form-label">Rows</label>
                         <select id="rowsPerPage" class="form-select">
@@ -621,19 +527,19 @@ include(__DIR__ . '/../inc/sidebar.php');
                             <option value="100">100</option>
                         </select>
                     </div>
+
                     <div class="col-md-1">
-                        <button id="clearFilters" class="btn btn-outline-secondary w-100">Clear</button>
+                        <button id="clearFilters" class="btn btn-outline-secondary w-100" type="button">Clear</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Enhanced Savings Table -->
             <div class="table-card">
                 <div class="table-header">
                     <h6 class="table-title">
                         <i class="bi bi-table"></i>
                         <span>Savings Transactions</span>
-                        <span id="filterIndicator" class="badge bg-info ms-2" style="display: none;"></span>
+                        <span id="filterIndicator" class="badge bg-info ms-2" style="display:none;"></span>
                     </h6>
                     <span id="recordCount"></span>
                 </div>
@@ -661,6 +567,7 @@ include(__DIR__ . '/../inc/sidebar.php');
                     <div id="paginationControls" class="btn-group"></div>
                 </div>
             </div>
+
         </div>
     </main>
 </div>
@@ -750,7 +657,7 @@ include(__DIR__ . '/../inc/sidebar.php');
     </div>
 </div>
 
-<!-- NEW: Member Breakdown Modal -->
+<!-- Member Breakdown Modal -->
 <div class="modal fade" id="breakdownModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -761,9 +668,8 @@ include(__DIR__ . '/../inc/sidebar.php');
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            
+
             <div class="modal-body">
-                <!-- Member Info Card -->
                 <div class="card bg-light mb-4">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -785,7 +691,6 @@ include(__DIR__ . '/../inc/sidebar.php');
                     </div>
                 </div>
 
-                <!-- Summary Stats Row -->
                 <div class="row g-3 mb-4">
                     <div class="col-md-3">
                         <div class="card border-success h-100">
@@ -829,7 +734,6 @@ include(__DIR__ . '/../inc/sidebar.php');
                     </div>
                 </div>
 
-                <!-- Transaction History Table -->
                 <div class="card">
                     <div class="card-header bg-white">
                         <h6 class="mb-0">
@@ -845,6 +749,7 @@ include(__DIR__ . '/../inc/sidebar.php');
                                         <th>Type</th>
                                         <th class="text-end">Amount</th>
                                         <th class="text-end">Balance After</th>
+                                        <th>Recorded By</th>
                                     </tr>
                                 </thead>
                                 <tbody id="breakdownTableBody">
@@ -859,6 +764,7 @@ include(__DIR__ . '/../inc/sidebar.php');
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="modal-footer bg-light">
@@ -876,637 +782,562 @@ include(__DIR__ . '/../inc/sidebar.php');
 <?php include(__DIR__ . '/../inc/footer.php'); ?>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const tbody = document.querySelector('#savingsTable tbody');
-        const paginationControls = document.getElementById('paginationControls');
-        const paginationInfo = document.getElementById('paginationInfo');
-        const searchInput = document.getElementById('searchInput');
-        const typeFilter = document.getElementById('typeFilter');
-        const dateFrom = document.getElementById('dateFrom');
-        const dateTo = document.getElementById('dateTo');
-        const rowsPerPage = document.getElementById('rowsPerPage');
-        const clearFilters = document.getElementById('clearFilters');
-        const exportCsvBtn = document.getElementById('exportCsvBtn');
-        const exportPdfBtn = document.getElementById('exportPdfBtn');
-        const addTxBtn = document.getElementById('addTxBtn');
-        const filterIndicator = document.getElementById('filterIndicator');
-        const recordCount = document.getElementById('recordCount');
+document.addEventListener('DOMContentLoaded', () => {
+    const tbody = document.querySelector('#savingsTable tbody');
+    const paginationControls = document.getElementById('paginationControls');
+    const paginationInfo = document.getElementById('paginationInfo');
 
-        const txModal = new bootstrap.Modal(document.getElementById('txModal'));
-        const viewModal = new bootstrap.Modal(document.getElementById('viewTxModal'));
-        const txForm = document.getElementById('txForm');
+    const searchBy = document.getElementById('searchBy');
+    const searchInput = document.getElementById('searchInput');
 
-        // NEW: Initialize breakdown modal
-        const breakdownModal = new bootstrap.Modal(document.getElementById('breakdownModal'));
-        let currentMemberData = null;
+    const typeFilter = document.getElementById('typeFilter');
+    const memberFilter = document.getElementById('memberFilter');
+    const recordedByFilter = document.getElementById('recordedByFilter');
 
-        let currentPage = 1,
-            limit = 10,
-            currentSearch = '',
-            currentCardFilter = 'all';
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+    const rowsPerPage = document.getElementById('rowsPerPage');
+    const clearFilters = document.getElementById('clearFilters');
 
-        let allTransactionsData = [];
-        let summaryData = {};
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    const exportPdfBtn = document.getElementById('exportPdfBtn');
+    const addTxBtn = document.getElementById('addTxBtn');
 
-        // ─── Sync Core1 Handler ───
-        document.getElementById('syncCore1Btn').addEventListener('click', function () {
-            const btn = this;
-            btn.disabled = true;
-            btn.classList.add('syncing');
-            btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Syncing...';
+    const filterIndicator = document.getElementById('filterIndicator');
+    const recordCount = document.getElementById('recordCount');
 
-            fetch('../../api/saving_monitoring/savings_sync_api.php')
-                .then(r => r.json())
-                .then(res => {
-                    if (res.success) {
-                        showSyncToast(res.message, 'success');
-                        loadData();
-                    } else {
-                        showSyncToast('Sync failed: ' + res.message, 'error');
-                    }
-                })
-                .catch(err => {
-                    showSyncToast('Sync failed: ' + err.message, 'error');
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.classList.remove('syncing');
-                    btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Sync Core1';
-                });
-        });
+    const txModal = new bootstrap.Modal(document.getElementById('txModal'));
+    const viewModal = new bootstrap.Modal(document.getElementById('viewTxModal'));
+    const breakdownModal = new bootstrap.Modal(document.getElementById('breakdownModal'));
 
-        // Auto-sync on page load
-        function autoSync() {
-           fetch('../../api/saving_monitoring/savings_sync_api.php')
-                .then(r => r.json())
-                .then(res => {
-                    if (res.success && !res.skipped) {
-                        console.log('[AutoSync]', res.message);
-                        loadData();
-                    }
-                })
-                .catch(err => {
-                    console.warn('[AutoSync] Failed silently:', err.message);
-                });
-        }
+    const txForm = document.getElementById('txForm');
 
-        // Toast notification
-        function showSyncToast(message, type) {
-            const existing = document.getElementById('syncToast');
-            if (existing) existing.remove();
+    let currentMemberData = null;
 
-            const toast = document.createElement('div');
-            toast.id = 'syncToast';
-            toast.className = 'position-fixed top-0 end-0 p-3';
-            toast.style.zIndex = '9999';
-            toast.innerHTML = `
-                <div class="toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0 show" role="alert">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
-                            ${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="document.getElementById('syncToast').remove()"></button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(toast);
+    let currentPage = 1;
+    let limit = 10;
+    let currentSearch = '';
+    let currentCardFilter = 'all';
 
-            setTimeout(() => {
-                const t = document.getElementById('syncToast');
-                if (t) t.remove();
-            }, 4000);
-        }
+    let allTransactionsData = [];
+    let summaryData = {};
 
-        function updateFilterIndicator() {
-            const filterTexts = {
-                'all': '',
-                'deposit': 'Deposits Only',
-                'withdrawal': 'Withdrawals Only'
-            };
+    // ─── Sync Core1 Handler ───
+    document.getElementById('syncCore1Btn').addEventListener('click', function () {
+        const btn = this;
+        btn.disabled = true;
+        btn.classList.add('syncing');
+        btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Syncing...';
 
-            if (currentCardFilter !== 'all') {
-                filterIndicator.textContent = filterTexts[currentCardFilter];
-                filterIndicator.style.display = 'inline-block';
-                filterIndicator.className = 'badge ms-2 ' +
-                    (currentCardFilter === 'deposit' ? 'bg-success' : 'bg-danger');
-            } else {
-                filterIndicator.style.display = 'none';
-            }
-        }
-
-        function loadData() {
-            const params = new URLSearchParams({
-                action: 'list',
-                page: currentPage,
-                limit: limit,
-                search: currentSearch,
-                filter: currentCardFilter,
-                type: typeFilter.value,
-                date_from: dateFrom.value,
-                date_to: dateTo.value
-            });
-
-            tbody.innerHTML = '<tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm"></div> Loading...</td></tr>';
-
-            fetch('savings_action.php', {
-                    method: 'POST',
-                    body: params
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.status !== 'success') {
-                        Swal.fire('Error', data.msg || 'Load failed', 'error');
-                        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Failed to load data</td></tr>';
-                        return;
-                    }
-
-                    allTransactionsData = data.rows || [];
-                    summaryData = data.summary || {};
-
-                    // Update summary cards
-                    document.getElementById('card_total_tx').textContent = data.summary.total || 0;
-                    document.getElementById('card_total_deposit').textContent = data.summary.total_deposits || 0;
-                    document.getElementById('card_total_withdraw').textContent = data.summary.total_withdrawals || 0;
-                    document.getElementById('card_balance').textContent = '₱' + parseFloat(data.summary.last_balance || 0).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-
-                    // Update record count
-                    const start = (currentPage - 1) * limit + 1;
-                    const end = Math.min(currentPage * limit, data.pagination?.total_records || 0);
-                    const total = data.pagination?.total_records || 0;
-                    recordCount.textContent = total > 0 ? `Showing ${start}-${end} of ${total} records` : 'No records found';
-
-                    // Render table - UPDATED with breakdown button
-                    tbody.innerHTML = '';
-                    if (data.rows && data.rows.length > 0) {
-                        data.rows.forEach(r => {
-                            const typeBadge = r.transaction_type === 'Deposit' ? 'badge-deposit' : 'badge-withdrawal';
-                            tbody.innerHTML += `
-                        <tr>
-                            <td>${r.saving_id}</td>
-                            <td>${r.member_id}</td>
-                            <td>${r.transaction_date}</td>
-                            <td><span class="badge ${typeBadge}">${r.transaction_type}</span></td>
-                            <td>₱${Number(r.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                            <td>₱${Number(r.balance).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                            <td>${r.recorded_by_name || '-'}</td>
-                            <td>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button class="btn btn-info viewBtn" data-id="${r.saving_id}" title="View Details">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-primary breakdownBtn" data-member-id="${r.member_id}" title="Member Breakdown">
-                                        <i class="bi bi-bar-chart-line"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>`;
-                        });
-                    } else {
-                        const filterMsg = currentCardFilter !== 'all' ?
-                            ` matching "${filterIndicator.textContent}"` : '';
-                        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">
-                        <i class="bi bi-inbox"></i> No transactions found${filterMsg}
-                    </td></tr>`;
-                    }
-
-                    renderPagination(data.pagination?.current_page || 1, data.pagination?.total_pages || 1);
-                    exportCsvBtn.href = `savings_action.php?export=csv&search=${encodeURIComponent(currentSearch)}&filter=${encodeURIComponent(currentCardFilter)}&type=${encodeURIComponent(typeFilter.value)}&date_from=${encodeURIComponent(dateFrom.value)}&date_to=${encodeURIComponent(dateTo.value)}`;
-                    updateFilterIndicator();
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Error loading data</td></tr>';
-                });
-        }
-
-        function renderPagination(current, total) {
-            paginationControls.innerHTML = '';
-            paginationInfo.textContent = total > 0 ? `Page ${current} of ${total}` : '';
-
-            if (total <= 1) return;
-
-            const prev = document.createElement('button');
-            prev.className = 'btn btn-sm btn-outline-primary';
-            prev.textContent = 'Prev';
-            prev.disabled = current === 1;
-            prev.onclick = () => {
-                currentPage--;
-                loadData();
-            };
-
-            const next = document.createElement('button');
-            next.className = 'btn btn-sm btn-outline-primary';
-            next.textContent = 'Next';
-            next.disabled = current === total;
-            next.onclick = () => {
-                currentPage++;
-                loadData();
-            };
-
-            paginationControls.appendChild(prev);
-            paginationControls.appendChild(next);
-        }
-
-        // Card filter click
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const filter = this.dataset.filter;
-
-                document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
-
-                if (currentCardFilter === filter) {
-                    currentCardFilter = 'all';
+        fetch('../../api/saving_monitoring/savings_sync_api.php')
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    showSyncToast(res.message, 'success');
+                    loadFilterMeta();
+                    loadData();
                 } else {
-                    this.classList.add('active');
-                    currentCardFilter = filter;
+                    showSyncToast('Sync failed: ' + res.message, 'error');
                 }
-
-                currentPage = 1;
-                loadData();
-            });
-        });
-
-        // PDF Export
-        exportPdfBtn.addEventListener('click', function() {
-            if (allTransactionsData.length === 0) {
-                Swal.fire('No Data', 'No transactions available to export', 'info');
-                return;
-            }
-
-            const {
-                jsPDF
-            } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-
-            doc.setFontSize(18);
-            doc.setTextColor(40, 40, 40);
-            doc.text('Savings Monitoring Report', 14, 15);
-
-            doc.setFontSize(10);
-            doc.setTextColor(100, 100, 100);
-            doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
-
-            doc.setFontSize(12);
-            doc.setTextColor(40, 40, 40);
-            doc.text('Summary', 14, 32);
-
-            doc.setFontSize(10);
-            doc.text(`Total Transactions: ${summaryData.total || 0}`, 14, 38);
-            doc.text(`Total Deposits: ${summaryData.total_deposits || 0}`, 70, 38);
-            doc.text(`Total Withdrawals: ${summaryData.total_withdrawals || 0}`, 126, 38);
-            doc.text(`Current Balance: ₱${parseFloat(summaryData.last_balance || 0).toLocaleString()}`, 14, 44);
-
-            if (currentCardFilter !== 'all') {
-                doc.setFontSize(9);
-                doc.setTextColor(200, 0, 0);
-                doc.text(`Filter Applied: ${filterIndicator.textContent}`, 14, 50);
-            }
-
-            const tableData = allTransactionsData.map(r => [
-                r.saving_id,
-                r.member_id,
-                r.transaction_date,
-                r.transaction_type,
-                `₱${Number(r.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}`,
-                `₱${Number(r.balance).toLocaleString(undefined, {minimumFractionDigits: 2})}`,
-                r.recorded_by_name || '-'
-            ]);
-
-            doc.autoTable({
-                startY: currentCardFilter !== 'all' ? 54 : 48,
-                head: [
-                    ['ID', 'Member ID', 'Date', 'Type', 'Amount', 'Balance', 'Recorded By']
-                ],
-                body: tableData,
-                styles: {
-                    fontSize: 9,
-                    cellPadding: 3,
-                },
-                headStyles: {
-                    fillColor: [5, 150, 105],
-                    textColor: 255,
-                    fontStyle: 'bold'
-                },
-                alternateRowStyles: {
-                    fillColor: [245, 245, 245]
-                },
-                didParseCell: function(data) {
-                    if (data.column.index === 3) {
-                        if (data.cell.raw === 'Deposit') {
-                            data.cell.styles.textColor = [16, 185, 129];
-                            data.cell.styles.fontStyle = 'bold';
-                        } else if (data.cell.raw === 'Withdrawal') {
-                            data.cell.styles.textColor = [239, 68, 68];
-                            data.cell.styles.fontStyle = 'bold';
-                        }
-                    }
-                }
-            });
-
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(8);
-                doc.setTextColor(150);
-                doc.text(
-                    `Page ${i} of ${pageCount}`,
-                    doc.internal.pageSize.width / 2,
-                    doc.internal.pageSize.height - 10, {
-                        align: 'center'
-                    }
-                );
-            }
-
-            const filename = `Savings_Report_${new Date().toISOString().slice(0, 10)}.pdf`;
-            doc.save(filename);
-        });
-
-        // Add Transaction
-        addTxBtn.addEventListener('click', () => {
-            txForm.reset();
-            document.getElementById('transaction_date').valueAsDate = new Date();
-            txModal.show();
-        });
-
-        txForm.addEventListener('submit', e => {
-            e.preventDefault();
-            const fd = new FormData(txForm);
-            fd.append('action', 'add');
-
-            fetch('savings_action.php', {
-                    method: 'POST',
-                    body: fd
-                })
-                .then(r => r.json())
-                .then(resp => {
-                    if (resp.status === 'success') {
-                        Swal.fire('Saved', resp.msg, 'success');
-                        txModal.hide();
-                        loadData();
-                    } else {
-                        Swal.fire('Error', resp.msg, 'error');
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    Swal.fire('Error', 'Failed to save transaction', 'error');
-                });
-        });
-
-        // NEW: Breakdown functionality
-        function loadMemberBreakdown(memberId) {
-            breakdownModal.show();
-            
-            document.getElementById('breakdownTableBody').innerHTML = `
-                <tr>
-                    <td colspan="5" class="text-center py-4">
-                        <div class="spinner-border spinner-border-sm text-primary"></div>
-                        <p class="mt-2 mb-0 text-muted">Loading member data...</p>
-                    </td>
-                </tr>
-            `;
-
-            fetch('savings_action.php', {
-                method: 'POST',
-                body: new URLSearchParams({
-                    action: 'breakdown',
-                    member_id: memberId
-                })
             })
+            .catch(err => {
+                showSyncToast('Sync failed: ' + err.message, 'error');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.classList.remove('syncing');
+                btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Sync Core1';
+            });
+    });
+
+    function autoSync() {
+        fetch('../../api/saving_monitoring/savings_sync_api.php')
+            .then(r => r.json())
+            .then(res => {
+                if (res.success && !res.skipped) {
+                    loadFilterMeta();
+                    loadData();
+                }
+            })
+            .catch(() => {});
+    }
+
+    function showSyncToast(message, type) {
+        const existing = document.getElementById('syncToast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.id = 'syncToast';
+        toast.className = 'position-fixed top-0 end-0 p-3';
+        toast.style.zIndex = '9999';
+        toast.innerHTML = `
+            <div class="toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0 show" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="document.getElementById('syncToast').remove()"></button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            const t = document.getElementById('syncToast');
+            if (t) t.remove();
+        }, 4000);
+    }
+
+    function updateFilterIndicator() {
+        const filterTexts = { all:'', deposit:'Deposits Only', withdrawal:'Withdrawals Only' };
+        if (currentCardFilter !== 'all') {
+            filterIndicator.textContent = filterTexts[currentCardFilter];
+            filterIndicator.style.display = 'inline-block';
+            filterIndicator.className = 'badge ms-2 ' + (currentCardFilter === 'deposit' ? 'bg-success' : 'bg-danger');
+        } else {
+            filterIndicator.style.display = 'none';
+        }
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func(...args), wait);
+        };
+    }
+
+    function loadFilterMeta() {
+        fetch('savings_action.php', {
+            method: 'POST',
+            body: new URLSearchParams({ action: 'meta' })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status !== 'success') return;
+
+            memberFilter.innerHTML = '<option value="">All Members</option>';
+            (data.members || []).forEach(m => {
+                memberFilter.innerHTML += `<option value="${m}">${m}</option>`;
+            });
+
+            recordedByFilter.innerHTML = '<option value="">All Users</option>';
+            (data.recorded_by || []).forEach(u => {
+                recordedByFilter.innerHTML += `<option value="${u.user_id}">${u.full_name}</option>`;
+            });
+        })
+        .catch(() => {});
+    }
+
+    function loadData() {
+        const params = new URLSearchParams({
+            action: 'list',
+            page: currentPage,
+            limit: limit,
+            search: currentSearch,
+            search_by: searchBy ? searchBy.value : 'auto',
+            filter: currentCardFilter,
+            type: typeFilter.value,
+            member_id: memberFilter.value,
+            recorded_by: recordedByFilter.value,
+            date_from: dateFrom.value,
+            date_to: dateTo.value
+        });
+
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm"></div> Loading...</td></tr>';
+
+        fetch('savings_action.php', { method:'POST', body: params })
             .then(r => r.json())
             .then(data => {
                 if (data.status !== 'success') {
-                    Swal.fire('Error', data.msg || 'Failed to load member data', 'error');
-                    breakdownModal.hide();
+                    Swal.fire('Error', data.msg || 'Load failed', 'error');
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Failed to load data</td></tr>';
                     return;
                 }
 
-                currentMemberData = data;
-                renderBreakdown(data);
+                allTransactionsData = data.rows || [];
+                summaryData = data.summary || {};
+
+                document.getElementById('card_total_tx').textContent = data.summary.total || 0;
+                document.getElementById('card_total_deposit').textContent = data.summary.total_deposits || 0;
+                document.getElementById('card_total_withdraw').textContent = data.summary.total_withdrawals || 0;
+                document.getElementById('card_balance').textContent =
+                    '₱' + parseFloat(data.summary.last_balance || 0).toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 });
+
+                const start = (currentPage - 1) * limit + 1;
+                const end = Math.min(currentPage * limit, data.pagination?.total_records || 0);
+                const total = data.pagination?.total_records || 0;
+                recordCount.textContent = total > 0 ? `Showing ${start}-${end} of ${total} records` : 'No records found';
+
+                tbody.innerHTML = '';
+                if (data.rows && data.rows.length > 0) {
+                    data.rows.forEach(r => {
+                        const typeBadge = r.transaction_type === 'Deposit' ? 'badge-deposit' : 'badge-withdrawal';
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${r.saving_id}</td>
+                                <td>${r.member_id}</td>
+                                <td>${r.transaction_date}</td>
+                                <td><span class="badge ${typeBadge}">${r.transaction_type}</span></td>
+                                <td>₱${Number(r.amount).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
+                                <td>₱${Number(r.balance).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
+                                <td>${r.recorded_by_name || '-'}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-info viewBtn" data-id="${r.saving_id}" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-primary breakdownBtn" data-member-id="${r.member_id}" title="Member Breakdown">
+                                            <i class="bi bi-bar-chart-line"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">
+                        <i class="bi bi-inbox"></i> No transactions found
+                    </td></tr>`;
+                }
+
+                renderPagination(data.pagination?.current_page || 1, data.pagination?.total_pages || 1);
+
+                exportCsvBtn.href =
+                    `savings_action.php?export=csv` +
+                    `&search=${encodeURIComponent(currentSearch)}` +
+                    `&search_by=${encodeURIComponent(searchBy ? searchBy.value : 'auto')}` +
+                    `&filter=${encodeURIComponent(currentCardFilter)}` +
+                    `&type=${encodeURIComponent(typeFilter.value)}` +
+                    `&member_id=${encodeURIComponent(memberFilter.value)}` +
+                    `&recorded_by=${encodeURIComponent(recordedByFilter.value)}` +
+                    `&date_from=${encodeURIComponent(dateFrom.value)}` +
+                    `&date_to=${encodeURIComponent(dateTo.value)}`;
+
+                updateFilterIndicator();
             })
             .catch(err => {
-                console.error('Breakdown error:', err);
-                Swal.fire('Error', 'Failed to load member breakdown', 'error');
-                breakdownModal.hide();
+                console.error('Fetch error:', err);
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Error loading data</td></tr>';
             });
-        }
+    }
 
-        function renderBreakdown(data) {
-            const { member_info, summary, transactions } = data;
+    function renderPagination(current, total) {
+        paginationControls.innerHTML = '';
+        paginationInfo.textContent = total > 0 ? `Page ${current} of ${total}` : '';
+        if (total <= 1) return;
 
-            document.getElementById('bd_member_id').textContent = member_info.member_id;
-            document.getElementById('bd_member_name').textContent = member_info.name;
+        const prev = document.createElement('button');
+        prev.className = 'btn btn-sm btn-outline-primary';
+        prev.textContent = 'Prev';
+        prev.disabled = current === 1;
+        prev.onclick = () => { currentPage--; loadData(); };
 
-            document.getElementById('bd_current_balance').textContent = 
-                summary.current_balance.toLocaleString(undefined, { minimumFractionDigits: 2 });
-            
-            document.getElementById('bd_total_deposits').textContent = 
-                '₱' + summary.total_deposits.toLocaleString(undefined, { minimumFractionDigits: 2 });
-            document.getElementById('bd_deposit_count').textContent = summary.deposit_count;
-            
-            document.getElementById('bd_total_withdrawals').textContent = 
-                '₱' + summary.total_withdrawals.toLocaleString(undefined, { minimumFractionDigits: 2 });
-            document.getElementById('bd_withdrawal_count').textContent = summary.withdrawal_count;
-            
-            const netChange = summary.total_deposits - summary.total_withdrawals;
-            const netChangeEl = document.getElementById('bd_net_change');
-            netChangeEl.textContent = '₱' + Math.abs(netChange).toLocaleString(undefined, { minimumFractionDigits: 2 });
-            netChangeEl.className = netChange >= 0 ? 'mb-1 text-success' : 'mb-1 text-danger';
-            
-            document.getElementById('bd_total_txns').textContent = summary.total_transactions;
+        const next = document.createElement('button');
+        next.className = 'btn btn-sm btn-outline-primary';
+        next.textContent = 'Next';
+        next.disabled = current === total;
+        next.onclick = () => { currentPage++; loadData(); };
 
-            const tbody = document.getElementById('breakdownTableBody');
-            tbody.innerHTML = '';
+        paginationControls.appendChild(prev);
+        paginationControls.appendChild(next);
+    }
 
-            if (transactions.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="text-center py-4 text-muted">
-                            <i class="bi bi-inbox fs-2"></i>
-                            <p class="mb-0 mt-2">No transactions found for this member</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            transactions.forEach(txn => {
-                const typeClass = txn.transaction_type === 'Deposit' ? 'badge-deposit' : 'badge-withdrawal';
-                const amountClass = txn.transaction_type === 'Deposit' ? 'text-success' : 'text-danger';
-                const amountIcon = txn.transaction_type === 'Deposit' ? '↓' : '↑';
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>
-                        <i class="bi bi-calendar3 text-muted me-1"></i>
-                        ${txn.transaction_date}
-                    </td>
-                    <td>
-                        <span class="badge ${typeClass}">${txn.transaction_type}</span>
-                    </td>
-                    <td class="text-end ${amountClass} fw-bold">
-                        ${amountIcon} ₱${Number(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                    </td>
-                    <td class="text-end">
-                        ₱${Number(txn.balance).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                    </td>
-                    <td>
-                        <small class="text-muted">
-                            <i class="bi bi-person"></i>
-                            ${txn.recorded_by_name || 'System'}
-                        </small>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Export member data to CSV
-        document.getElementById('exportMemberBtn').addEventListener('click', () => {
-            if (!currentMemberData) {
-                Swal.fire('Error', 'No member data to export', 'warning');
-                return;
-            }
-
-            const { member_info, transactions } = currentMemberData;
-            
-            let csv = 'Member Transaction Report\n';
-            csv += `Member ID,${member_info.member_id}\n`;
-            csv += `Member Name,${member_info.name}\n`;
-            csv += `Generated,${new Date().toLocaleString()}\n\n`;
-            csv += 'Date,Type,Amount,Balance,Recorded By\n';
-            
-            transactions.forEach(txn => {
-                csv += `${txn.transaction_date},${txn.transaction_type},${txn.amount},${txn.balance},${txn.recorded_by_name || 'System'}\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `Member_${member_info.member_id}_Transactions_${new Date().toISOString().slice(0, 10)}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            Swal.fire({
-                title: 'Export Successful',
-                text: 'Member transaction data has been exported',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false
-            });
-        });
-
-        // View Transaction - UPDATED to handle both view and breakdown
-        tbody.addEventListener('click', e => {
-            const viewBtn = e.target.closest('.viewBtn');
-            if (viewBtn) {
-                const id = viewBtn.dataset.id;
-                fetch('savings_action.php', {
-                        method: 'POST',
-                        body: new URLSearchParams({
-                            action: 'get',
-                            id
-                        })
-                    })
-                    .then(r => r.json())
-                    .then(res => {
-                        if (res.status !== 'success') {
-                            Swal.fire('Error', res.msg, 'error');
-                            return;
-                        }
-
-                        const d = res.row;
-                        document.getElementById('v_id').textContent = d.saving_id;
-                        document.getElementById('v_member').textContent = d.member_id;
-                        document.getElementById('v_date').textContent = d.transaction_date;
-                        document.getElementById('v_type').innerHTML = `<span class="badge ${d.transaction_type === 'Deposit' ? 'badge-deposit' : 'badge-withdrawal'}">${d.transaction_type}</span>`;
-                        document.getElementById('v_amount').textContent = Number(d.amount).toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        });
-                        document.getElementById('v_balance').textContent = Number(d.balance).toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        });
-                        document.getElementById('v_by').textContent = d.recorded_by_name || 'Unknown';
-                        viewModal.show();
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        Swal.fire('Error', 'Failed to load transaction details', 'error');
-                    });
-                return;
-            }
-
-            // NEW: Handle breakdown button
-            const breakdownBtn = e.target.closest('.breakdownBtn');
-            if (breakdownBtn) {
-                const memberId = breakdownBtn.dataset.memberId;
-                loadMemberBreakdown(memberId);
-                return;
-            }
-        });
-
-        // Filter event listeners with debounce
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func(...args), wait);
-            };
-        }
-
-        searchInput.addEventListener('input', debounce(() => {
-            currentSearch = searchInput.value.trim();
-            currentPage = 1;
-            loadData();
-        }, 500));
-
-        typeFilter.addEventListener('change', () => {
-            currentPage = 1;
-            loadData();
-        });
-
-        dateFrom.addEventListener('change', () => {
-            currentPage = 1;
-            loadData();
-        });
-
-        dateTo.addEventListener('change', () => {
-            currentPage = 1;
-            loadData();
-        });
-
-        rowsPerPage.addEventListener('change', () => {
-            limit = parseInt(rowsPerPage.value);
-            currentPage = 1;
-            loadData();
-        });
-
-        clearFilters.addEventListener('click', () => {
-            currentSearch = '';
-            currentCardFilter = 'all';
-            currentPage = 1;
-
-            searchInput.value = '';
-            typeFilter.value = '';
-            dateFrom.value = '';
-            dateTo.value = '';
-            rowsPerPage.value = '10';
-            limit = 10;
-
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const filter = this.dataset.filter;
             document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+
+            if (currentCardFilter === filter) {
+                currentCardFilter = 'all';
+            } else {
+                this.classList.add('active');
+                currentCardFilter = filter;
+            }
+            currentPage = 1;
             loadData();
         });
-
-        // Initial load + auto-sync
-        autoSync();
-        loadData();
-        setInterval(autoSync, 30000);
     });
+
+    exportPdfBtn.addEventListener('click', function() {
+        if (allTransactionsData.length === 0) {
+            Swal.fire('No Data', 'No transactions available to export', 'info');
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+
+        doc.setFontSize(18);
+        doc.setTextColor(40, 40, 40);
+        doc.text('Savings Monitoring Report', 14, 15);
+
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
+
+        doc.setFontSize(12);
+        doc.setTextColor(40, 40, 40);
+        doc.text('Summary', 14, 32);
+
+        doc.setFontSize(10);
+        doc.text(`Total Transactions: ${summaryData.total || 0}`, 14, 38);
+        doc.text(`Total Deposits: ${summaryData.total_deposits || 0}`, 70, 38);
+        doc.text(`Total Withdrawals: ${summaryData.total_withdrawals || 0}`, 126, 38);
+        doc.text(`Current Balance: ₱${parseFloat(summaryData.last_balance || 0).toLocaleString()}`, 14, 44);
+
+        const tableData = allTransactionsData.map(r => [
+            r.saving_id,
+            r.member_id,
+            r.transaction_date,
+            r.transaction_type,
+            `₱${Number(r.amount).toLocaleString(undefined, {minimumFractionDigits:2})}`,
+            `₱${Number(r.balance).toLocaleString(undefined, {minimumFractionDigits:2})}`,
+            r.recorded_by_name || '-'
+        ]);
+
+        doc.autoTable({
+            startY: 50,
+            head: [['ID','Member ID','Date','Type','Amount','Balance','Recorded By']],
+            body: tableData,
+            styles: { fontSize: 9, cellPadding: 3 },
+            headStyles: { fillColor: [5,150,105], textColor: 255, fontStyle: 'bold' },
+            alternateRowStyles: { fillColor: [245,245,245] }
+        });
+
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.width/2, doc.internal.pageSize.height - 10, { align:'center' });
+        }
+
+        doc.save(`Savings_Report_${new Date().toISOString().slice(0,10)}.pdf`);
+    });
+
+    addTxBtn.addEventListener('click', () => {
+        txForm.reset();
+        document.getElementById('transaction_date').valueAsDate = new Date();
+        txModal.show();
+    });
+
+    txForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const fd = new FormData(txForm);
+        fd.append('action', 'add');
+
+        fetch('savings_action.php', { method:'POST', body: fd })
+            .then(r => r.json())
+            .then(resp => {
+                if (resp.status === 'success') {
+                    Swal.fire('Saved', resp.msg, 'success');
+                    txModal.hide();
+                    loadFilterMeta();
+                    loadData();
+                } else {
+                    Swal.fire('Error', resp.msg, 'error');
+                }
+            })
+            .catch(() => Swal.fire('Error', 'Failed to save transaction', 'error'));
+    });
+
+    function loadMemberBreakdown(memberId) {
+        breakdownModal.show();
+        document.getElementById('breakdownTableBody').innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-4">
+                    <div class="spinner-border spinner-border-sm text-primary"></div>
+                    <p class="mt-2 mb-0 text-muted">Loading member data...</p>
+                </td>
+            </tr>
+        `;
+
+        fetch('savings_action.php', {
+            method: 'POST',
+            body: new URLSearchParams({ action:'breakdown', member_id: memberId })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status !== 'success') {
+                Swal.fire('Error', data.msg || 'Failed to load member data', 'error');
+                breakdownModal.hide();
+                return;
+            }
+            currentMemberData = data;
+            renderBreakdown(data);
+        })
+        .catch(() => {
+            Swal.fire('Error', 'Failed to load member breakdown', 'error');
+            breakdownModal.hide();
+        });
+    }
+
+    function renderBreakdown(data) {
+        const { member_info, summary, transactions } = data;
+
+        document.getElementById('bd_member_id').textContent = member_info.member_id;
+        document.getElementById('bd_member_name').textContent = member_info.name;
+
+        document.getElementById('bd_current_balance').textContent =
+            summary.current_balance.toLocaleString(undefined, { minimumFractionDigits:2 });
+
+        document.getElementById('bd_total_deposits').textContent =
+            '₱' + summary.total_deposits.toLocaleString(undefined, { minimumFractionDigits:2 });
+        document.getElementById('bd_deposit_count').textContent = summary.deposit_count;
+
+        document.getElementById('bd_total_withdrawals').textContent =
+            '₱' + summary.total_withdrawals.toLocaleString(undefined, { minimumFractionDigits:2 });
+        document.getElementById('bd_withdrawal_count').textContent = summary.withdrawal_count;
+
+        const netChange = summary.total_deposits - summary.total_withdrawals;
+        const netChangeEl = document.getElementById('bd_net_change');
+        netChangeEl.textContent = '₱' + Math.abs(netChange).toLocaleString(undefined, { minimumFractionDigits:2 });
+        netChangeEl.className = netChange >= 0 ? 'mb-1 text-success' : 'mb-1 text-danger';
+
+        document.getElementById('bd_total_txns').textContent = summary.total_transactions;
+
+        const bt = document.getElementById('breakdownTableBody');
+        bt.innerHTML = '';
+
+        if (!transactions || transactions.length === 0) {
+            bt.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">
+                <i class="bi bi-inbox fs-2"></i><p class="mb-0 mt-2">No transactions found for this member</p>
+            </td></tr>`;
+            return;
+        }
+
+        transactions.forEach(txn => {
+            const typeClass = txn.transaction_type === 'Deposit' ? 'badge-deposit' : 'badge-withdrawal';
+            const amountClass = txn.transaction_type === 'Deposit' ? 'text-success' : 'text-danger';
+            const amountIcon = txn.transaction_type === 'Deposit' ? '↓' : '↑';
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><i class="bi bi-calendar3 text-muted me-1"></i>${txn.transaction_date}</td>
+                <td><span class="badge ${typeClass}">${txn.transaction_type}</span></td>
+                <td class="text-end ${amountClass} fw-bold">${amountIcon} ₱${Number(txn.amount).toLocaleString(undefined, { minimumFractionDigits:2 })}</td>
+                <td class="text-end">₱${Number(txn.balance).toLocaleString(undefined, { minimumFractionDigits:2 })}</td>
+                <td><small class="text-muted"><i class="bi bi-person"></i> ${txn.recorded_by_name || 'System'}</small></td>
+            `;
+            bt.appendChild(row);
+        });
+    }
+
+    document.getElementById('exportMemberBtn').addEventListener('click', () => {
+        if (!currentMemberData) {
+            Swal.fire('Error', 'No member data to export', 'warning');
+            return;
+        }
+
+        const { member_info, transactions } = currentMemberData;
+
+        let csv = 'Member Transaction Report\n';
+        csv += `Member ID,${member_info.member_id}\n`;
+        csv += `Member Name,${member_info.name}\n`;
+        csv += `Generated,${new Date().toLocaleString()}\n\n`;
+        csv += 'Date,Type,Amount,Balance,Recorded By\n';
+
+        transactions.forEach(txn => {
+            csv += `${txn.transaction_date},${txn.transaction_type},${txn.amount},${txn.balance},${txn.recorded_by_name || 'System'}\n`;
+        });
+
+        const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `Member_${member_info.member_id}_Transactions_${new Date().toISOString().slice(0,10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        Swal.fire({ title:'Export Successful', text:'Member transaction data has been exported', icon:'success', timer:2000, showConfirmButton:false });
+    });
+
+    tbody.addEventListener('click', e => {
+        const viewBtn = e.target.closest('.viewBtn');
+        if (viewBtn) {
+            const id = viewBtn.dataset.id;
+            fetch('savings_action.php', {
+                method:'POST',
+                body: new URLSearchParams({ action:'get', id })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status !== 'success') {
+                    Swal.fire('Error', res.msg, 'error');
+                    return;
+                }
+                const d = res.row;
+                document.getElementById('v_id').textContent = d.saving_id;
+                document.getElementById('v_member').textContent = d.member_id;
+                document.getElementById('v_date').textContent = d.transaction_date;
+                document.getElementById('v_type').innerHTML = `<span class="badge ${d.transaction_type === 'Deposit' ? 'badge-deposit' : 'badge-withdrawal'}">${d.transaction_type}</span>`;
+                document.getElementById('v_amount').textContent = Number(d.amount).toLocaleString(undefined, { minimumFractionDigits:2 });
+                document.getElementById('v_balance').textContent = Number(d.balance).toLocaleString(undefined, { minimumFractionDigits:2 });
+                document.getElementById('v_by').textContent = d.recorded_by_name || 'Unknown';
+                viewModal.show();
+            })
+            .catch(() => Swal.fire('Error', 'Failed to load transaction details', 'error'));
+            return;
+        }
+
+        const breakdownBtn = e.target.closest('.breakdownBtn');
+        if (breakdownBtn) {
+            loadMemberBreakdown(breakdownBtn.dataset.memberId);
+            return;
+        }
+    });
+
+    searchInput.addEventListener('input', debounce(() => {
+        currentSearch = searchInput.value.trim();
+        currentPage = 1;
+        loadData();
+    }, 500));
+
+    if (searchBy) {
+        searchBy.addEventListener('change', () => {
+            currentPage = 1;
+            loadData();
+        });
+    }
+
+    typeFilter.addEventListener('change', () => { currentPage = 1; loadData(); });
+    memberFilter.addEventListener('change', () => { currentPage = 1; loadData(); });
+    recordedByFilter.addEventListener('change', () => { currentPage = 1; loadData(); });
+    dateFrom.addEventListener('change', () => { currentPage = 1; loadData(); });
+    dateTo.addEventListener('change', () => { currentPage = 1; loadData(); });
+
+    rowsPerPage.addEventListener('change', () => {
+        limit = parseInt(rowsPerPage.value);
+        currentPage = 1;
+        loadData();
+    });
+
+    clearFilters.addEventListener('click', () => {
+        currentSearch = '';
+        currentCardFilter = 'all';
+        currentPage = 1;
+
+        searchInput.value = '';
+        if (searchBy) searchBy.value = 'auto';
+        typeFilter.value = '';
+        memberFilter.value = '';
+        recordedByFilter.value = '';
+        dateFrom.value = '';
+        dateTo.value = '';
+        rowsPerPage.value = '10';
+        limit = 10;
+
+        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+        loadData();
+    });
+
+    loadFilterMeta();
+    autoSync();
+    loadData();
+    setInterval(autoSync, 30000);
+});
 </script>
