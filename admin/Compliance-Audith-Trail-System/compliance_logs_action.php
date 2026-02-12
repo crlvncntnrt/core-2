@@ -102,11 +102,37 @@ function loadTCPDF() {
 
 
 class ComplianceExportPDF extends TCPDF {
+    public function Header(): void {
+        $leftMargin = 10;
+        $top = 8;
+        $width = 277;
+
+        // Dark green company header band
+        $this->SetFillColor(20, 83, 45);
+        $this->SetDrawColor(20, 83, 45);
+        $this->RoundedRect($leftMargin, $top, $width, 20, 2, '1111', 'FD');
+
+        // Company logo (if available)
+        $logoPath = __DIR__ . '/../../dist/img/logo.jpg';
+        if (is_file($logoPath)) {
+            $this->Image($logoPath, $leftMargin + 3, $top + 2, 16, 16, 'JPG');
+        }
+
+        $this->SetTextColor(255, 255, 255);
+        $this->SetXY($leftMargin + 22, $top + 4);
+        $this->SetFont('helvetica', 'B', 13);
+        $this->Cell(0, 6, 'Golden Horizons Cooperative', 0, 1, 'L');
+
+        $this->SetX($leftMargin + 22);
+        $this->SetFont('helvetica', '', 9);
+        $this->Cell(0, 5, 'Compliance & Audit Trail Report', 0, 0, 'L');
+    }
+
     public function Footer(): void {
         $this->SetY(-12);
         $this->SetFont('helvetica', 'I', 8);
-        $this->SetTextColor(120, 120, 120);
-        $this->Cell(0, 8, 'Confidential - Compliance Monitoring - Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, 0, 'C');
+        $this->SetTextColor(20, 83, 45);
+        $this->Cell(0, 8, 'Confidential • Compliance Monitoring • Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, 0, 'C');
     }
 }
 
@@ -118,16 +144,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         $end = trim($_GET['end'] ?? '');
         $status = trim($_GET['status'] ?? '');
         $pdfPassword = trim($_GET['pdf_password'] ?? '');
-
-        if (strlen($pdfPassword) < 6) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Export failed. PDF password must be at least 6 characters.',
-                'msg' => 'Export failed. PDF password must be at least 6 characters.'
-            ]);
-            exit;
-        }
 
         // Build WHERE clause
         $filterData = buildWhereClause($search, $start, $end, $status);
@@ -237,17 +253,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         exit;
     }
     
-    if (!class_exists('ComplianceExportPDF', false)) {
-        class ComplianceExportPDF extends TCPDF {
-            public function Footer() {
-                $this->SetY(-12);
-                $this->SetFont('helvetica', 'I', 8);
-                $this->SetTextColor(120, 120, 120);
-                $this->Cell(0, 8, 'Confidential - Compliance Monitoring - Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, 0, 'C');
-            }
-        }
-    }
-
     try {
         $search = trim($_GET['search'] ?? '');
         $start = trim($_GET['start'] ?? '');
@@ -307,98 +312,102 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         $result = $stmt->get_result();
 
         // Create PDF using TCPDF
-        $pdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf = new ComplianceExportPDF('L', 'mm', 'A4', true, 'UTF-8', false);
 
         $pdf->SetCreator('Compliance System');
         $pdf->SetAuthor('Admin');
-        $pdf->SetTitle('Compliance & Audit Trail Logs');
+        $pdf->SetTitle('Compliance & Audit Trail Logs - Golden Horizons Cooperative');
         $pdf->SetSubject('Audit Trail Report');
 
         // Security: require password before opening exported PDF
         $pdf->SetProtection(['print', 'copy'], $pdfPassword, null, 0, null);
 
-        $pdf->SetMargins(10, 12, 10);
+        $pdf->SetMargins(10, 32, 10);
         $pdf->SetAutoPageBreak(TRUE, 15);
         $pdf->AddPage();
 
-        // Designed header card
-        $pdf->SetFillColor(15, 23, 42);
-        $pdf->SetTextColor(255, 255, 255);
-        $pdf->SetDrawColor(15, 23, 42);
-        $pdf->RoundedRect(10, 8, 277, 18, 2, '1111', 'FD');
-
-        $pdf->SetY(11);
-        $pdf->SetFont('helvetica', 'B', 14);
-        $pdf->Cell(0, 6, 'Compliance & Audit Trail Logs', 0, 1, 'C');
-
-        $pdf->SetFont('helvetica', '', 9);
-        $pdf->Cell(0, 4, 'Generated: ' . date('Y-m-d H:i:s'), 0, 1, 'C');
-
-        $pdf->Ln(2);
-        $pdf->SetTextColor(40, 40, 40);
-        $pdf->SetFillColor(239, 246, 255);
+        $pdf->SetTextColor(34, 34, 34);
+        $pdf->SetFillColor(220, 252, 231);
 
         $periodText = ($start && $end)
-            ? ('Period: ' . htmlspecialchars($start, ENT_QUOTES, 'UTF-8') . ' to ' . htmlspecialchars($end, ENT_QUOTES, 'UTF-8'))
+            ? ('Period: ' . $start . ' to ' . $end)
             : 'Period: All Dates';
         $statusText = $status
-            ? ('Status: ' . htmlspecialchars($status, ENT_QUOTES, 'UTF-8'))
+            ? ('Status: ' . $status)
             : 'Status: All';
 
         $pdf->SetFont('helvetica', 'B', 9);
         $pdf->Cell(138.5, 7, $periodText, 0, 0, 'L', true);
         $pdf->Cell(138.5, 7, $statusText, 0, 1, 'R', true);
+
+        $pdf->SetFont('helvetica', '', 9);
+        $pdf->Cell(0, 6, 'Generated: ' . date('Y-m-d H:i:s'), 0, 1, 'L');
         $pdf->Ln(3);
 
-        // Table header
-        $pdf->SetFont('helvetica', 'B', 8);
-        $pdf->SetFillColor(30, 64, 175);
-        $pdf->SetTextColor(255, 255, 255);
-        
-        $pdf->Cell(10, 7, '#', 1, 0, 'C', true);
-        $pdf->Cell(35, 7, 'User', 1, 0, 'C', true);
-        $pdf->Cell(30, 7, 'Action', 1, 0, 'C', true);
-        $pdf->Cell(30, 7, 'Module', 1, 0, 'C', true);
-        $pdf->Cell(70, 7, 'Description', 1, 0, 'C', true);
-        $pdf->Cell(25, 7, 'Status', 1, 0, 'C', true);
-        $pdf->Cell(35, 7, 'Date/Time', 1, 0, 'C', true);
-        $pdf->Cell(25, 7, 'IP', 1, 1, 'C', true);
-        
-        // Table data
-        $pdf->SetFont('helvetica', '', 7);
-        $pdf->SetTextColor(0, 0, 0);
-        
+        // Table data (green theme)
+        $html = '
+            <style>
+                table { border-collapse: collapse; }
+                th { background-color: #14532d; color: #ffffff; font-size: 9px; font-weight: bold; padding: 6px; border: 1px solid #166534; text-align: center; }
+                td { font-size: 8px; color: #1f2937; padding: 5px; border: 1px solid #bbf7d0; }
+                .row-light { background-color: #f0fdf4; }
+                .row-alt { background-color: #dcfce7; }
+                .center { text-align: center; }
+            </style>
+            <table width="100%" cellpadding="4">
+                <thead>
+                    <tr>
+                        <th width="4%">#</th>
+                        <th width="14%">User</th>
+                        <th width="11%">Action</th>
+                        <th width="11%">Module</th>
+                        <th width="28%">Description</th>
+                        <th width="10%">Status</th>
+                        <th width="13%">Date/Time</th>
+                        <th width="9%">IP</th>
+                    </tr>
+                </thead>
+                <tbody>';
+
         $n = 1;
+        $hasRows = false;
         while ($row = $result->fetch_assoc()) {
-            $fill = ($n % 2 == 0);
-            if ($fill) {
-                $pdf->SetFillColor(241, 245, 249);
-            }
-            
+            $hasRows = true;
+            $rowClass = ($n % 2 === 0) ? 'row-alt' : 'row-light';
             $user = $row['full_name'] ?? $row['username'] ?? 'System';
             $action = $row['action_type'] ?? '';
             $module = $row['module_name'] ?? '';
-            $remarks = mb_substr($row['remarks'] ?? '', 0, 80);
+            $remarks = $row['remarks'] ?? '';
             $statusVal = $row['compliance_status'] ?? '';
             $datetime = $row['action_time'] ?? '';
             $ip = $row['ip_address'] ?? '-';
-            
-            $pdf->Cell(10, 6, $n++, 1, 0, 'C', $fill);
-            $pdf->Cell(35, 6, $user, 1, 0, 'L', $fill);
-            $pdf->Cell(30, 6, $action, 1, 0, 'L', $fill);
-            $pdf->Cell(30, 6, $module, 1, 0, 'L', $fill);
-            $pdf->Cell(70, 6, $remarks, 1, 0, 'L', $fill);
-            $pdf->Cell(25, 6, $statusVal, 1, 0, 'C', $fill);
-            $pdf->Cell(35, 6, $datetime, 1, 0, 'C', $fill);
-            $pdf->Cell(25, 6, $ip, 1, 1, 'C', $fill);
+
+            $html .= '<tr class="' . $rowClass . '">'
+                . '<td class="center">' . $n . '</td>'
+                . '<td>' . htmlspecialchars((string)$user, ENT_QUOTES, 'UTF-8') . '</td>'
+                . '<td>' . htmlspecialchars((string)$action, ENT_QUOTES, 'UTF-8') . '</td>'
+                . '<td>' . htmlspecialchars((string)$module, ENT_QUOTES, 'UTF-8') . '</td>'
+                . '<td>' . htmlspecialchars((string)$remarks, ENT_QUOTES, 'UTF-8') . '</td>'
+                . '<td class="center">' . htmlspecialchars((string)$statusVal, ENT_QUOTES, 'UTF-8') . '</td>'
+                . '<td class="center">' . htmlspecialchars((string)$datetime, ENT_QUOTES, 'UTF-8') . '</td>'
+                . '<td class="center">' . htmlspecialchars((string)$ip, ENT_QUOTES, 'UTF-8') . '</td>'
+                . '</tr>';
+            $n++;
         }
+
+        if (!$hasRows) {
+            $html .= '<tr class="row-light"><td colspan="8" class="center">No compliance logs found for the selected filters.</td></tr>';
+        }
+
+        $html .= '</tbody></table>';
+
+        $pdf->writeHTML($html, true, false, true, false, '');
         
         $stmt->close();
 
-        $pdf->SetY(-12);
-        $pdf->SetFont('helvetica', 'I', 8);
-        $pdf->SetTextColor(120, 120, 120);
-        $pdf->Cell(0, 8, 'Confidential • Compliance Monitoring • Page ' . $pdf->getAliasNumPage() . '/' . $pdf->getAliasNbPages(), 0, 0, 'C');
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
 
         // Output PDF
         $filename = 'compliance_logs_' . date('Y-m-d_His') . '.pdf';
