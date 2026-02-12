@@ -1195,24 +1195,24 @@ include(__DIR__ . '/../inc/sidebar.php');
             if (!passwordPrompt.isConfirmed) return;
             const pdfPassword = passwordPrompt.value;
 
-            const { jsPDF } = window.jspdf;
+            const {
+                jsPDF
+            } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
+            let hasEncryption = false;
             if (typeof doc.setEncryption === 'function') {
-                doc.setEncryption({ userPassword: pdfPassword, ownerPassword: pdfPassword });
+                doc.setEncryption({
+                    userPassword: pdfPassword,
+                    ownerPassword: pdfPassword
+                });
+                hasEncryption = true;
             }
 
-            doc.setFillColor(15, 23, 42);
-            doc.roundedRect(10, 8, 277, 18, 2, 2, 'F');
-            doc.setFontSize(16);
-            doc.setTextColor(255, 255, 255);
-            doc.text('Collection Monitoring & Recovery Report', 14, 19);
-
-            doc.setFontSize(9);
-            doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 24);
+            await addCompanyPdfHeader(doc, 'Collection Monitoring & Recovery Report');
 
             doc.setTextColor(40, 40, 40);
             doc.setFontSize(11);
-            doc.text('Summary', 14, 34);
+            doc.text('Summary', 14, 37);
 
             doc.setFontSize(10);
             const totalLoans = document.getElementById('card_total_loans').textContent;
@@ -1220,15 +1220,15 @@ include(__DIR__ . '/../inc/sidebar.php');
             const overdueLoans = document.getElementById('card_overdue_loans').textContent;
             const atRiskLoans = document.getElementById('card_at_risk_loans').textContent;
 
-            doc.text(`Total Loans: ${totalLoans}`, 14, 40);
-            doc.text(`Active: ${activeLoans}`, 70, 40);
-            doc.text(`Overdue: ${overdueLoans}`, 126, 40);
-            doc.text(`At Risk: ${atRiskLoans}`, 182, 40);
+            doc.text(`Total Loans: ${totalLoans}`, 14, 43);
+            doc.text(`Active: ${activeLoans}`, 70, 43);
+            doc.text(`Overdue: ${overdueLoans}`, 126, 43);
+            doc.text(`At Risk: ${atRiskLoans}`, 182, 43);
 
             if (currentFilters.cardFilter !== 'all') {
                 doc.setFontSize(9);
                 doc.setTextColor(200, 0, 0);
-                doc.text(`Filter Applied: ${filterIndicator.textContent}`, 14, 46);
+                doc.text(`Filter Applied: ${filterIndicator.textContent}`, 14, 49);
             }
 
             const tableData = allLoans.map(l => [
@@ -1245,12 +1245,23 @@ include(__DIR__ . '/../inc/sidebar.php');
             ]);
 
             doc.autoTable({
-                startY: currentFilters.cardFilter !== 'all' ? 50 : 46,
-                head: [['ID', 'Member', 'Type', 'Principal', 'Rate', 'Term', 'Start', 'Status', 'Overdue', 'Risk']],
+                startY: currentFilters.cardFilter !== 'all' ? 53 : 49,
+                head: [
+                    ['ID', 'Member', 'Type', 'Principal', 'Rate', 'Term', 'Start', 'Status', 'Overdue', 'Risk']
+                ],
                 body: tableData,
-                styles: { fontSize: 8, cellPadding: 2 },
-                headStyles: { fillColor: [30, 64, 175], textColor: 255, fontStyle: 'bold' },
-                alternateRowStyles: { fillColor: [241, 245, 249] }
+                styles: {
+                    fontSize: 8,
+                    cellPadding: 2
+                },
+                headStyles: {
+                    fillColor: [20, 83, 45],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: {
+                    fillColor: [241, 245, 249]
+                }
             });
 
             const pageCount = doc.internal.getNumberOfPages();
@@ -1258,11 +1269,29 @@ include(__DIR__ . '/../inc/sidebar.php');
                 doc.setPage(i);
                 doc.setFontSize(8);
                 doc.setTextColor(120);
-                doc.text(`Confidential • Page ${i} of ${pageCount}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 8, { align: 'center' });
+                doc.text(`Confidential • Page ${i} of ${pageCount}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 8, {
+                    align: 'center'
+                });
             }
 
             doc.save(`repayment_tracker_${new Date().toISOString().split('T')[0]}.pdf`);
-            Swal.fire({ icon: 'info', title: 'PDF Exported', text: 'Use your entered password to open the PDF.', timer: 2200, showConfirmButton: false });
+            if (hasEncryption) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'PDF Exported',
+                    text: 'Use your entered password to open the PDF.',
+                    timer: 2200,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'PDF Exported Without Encryption',
+                    text: 'Your current jsPDF build does not support password encryption.',
+                    timer: 3200,
+                    showConfirmButton: false
+                });
+            }
         });
 
         function debounce(func, wait) {
@@ -1271,6 +1300,49 @@ include(__DIR__ . '/../inc/sidebar.php');
                 clearTimeout(timeout);
                 timeout = setTimeout(() => func(...args), wait);
             };
+        }
+
+        function loadImageAsDataUrl(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.naturalWidth;
+                        canvas.height = img.naturalHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        resolve(canvas.toDataURL('image/jpeg'));
+                    } catch (e) {
+                        reject(e);
+                    }
+                };
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+
+        async function addCompanyPdfHeader(doc, reportTitle) {
+            doc.setFillColor(20, 83, 45);
+            doc.roundedRect(10, 8, 277, 20, 2, 2, 'F');
+
+            try {
+                const logoData = await loadImageAsDataUrl('../../dist/img/logo.jpg');
+                doc.addImage(logoData, 'JPEG', 13, 10.5, 15, 15);
+            } catch (_) {
+                // no-op: continue without logo if unavailable
+            }
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(13);
+            doc.text('Golden Horizons Cooperative', 32, 16);
+            doc.setFontSize(10);
+            doc.text(reportTitle, 32, 22);
+            doc.setFontSize(9);
+            doc.text(`Generated: ${new Date().toLocaleString()}`, 240, 22, {
+                align: 'right'
+            });
         }
 
         // INITIAL LOAD

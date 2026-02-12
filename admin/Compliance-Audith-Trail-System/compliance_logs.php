@@ -280,7 +280,7 @@ include(__DIR__ . '/../inc/sidebar.php');
 <div class="main-wrap">
     <main class="main-content" id="main-content">
         <div class="container-fluid py-4">
-            
+
             <!-- Enhanced Header -->
             <div class="page-header">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -369,7 +369,9 @@ include(__DIR__ . '/../inc/sidebar.php');
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
+                            <tr>
+                                <td colspan="8" class="text-center">Loading...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -390,109 +392,142 @@ include(__DIR__ . '/../inc/sidebar.php');
 <?php include(__DIR__ . '/../inc/footer.php'); ?>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
 
-    const tbody = document.querySelector('#logsTable tbody');
-    const pagination = document.getElementById('logsPagination');
-    const recordInfo = document.getElementById('recordInfo');
-    const recordInfoBottom = document.getElementById('recordInfoBottom');
-    const searchInput = document.getElementById('search');
-    const startInput = document.getElementById('start');
-    const endInput = document.getElementById('end');
-    const statusInput = document.getElementById('status');
-    const rowsInput = document.getElementById('rowsPerPage');
-    const exportPdfBtn = document.getElementById('exportPdfBtn');
-    const exportCsvBtn = document.getElementById('exportCsvBtn');
-    const reloadBtn = document.getElementById('reloadBtn');
+        const tbody = document.querySelector('#logsTable tbody');
+        const pagination = document.getElementById('logsPagination');
+        const recordInfo = document.getElementById('recordInfo');
+        const recordInfoBottom = document.getElementById('recordInfoBottom');
+        const searchInput = document.getElementById('search');
+        const startInput = document.getElementById('start');
+        const endInput = document.getElementById('end');
+        const statusInput = document.getElementById('status');
+        const rowsInput = document.getElementById('rowsPerPage');
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+        const exportCsvBtn = document.getElementById('exportCsvBtn');
+        const reloadBtn = document.getElementById('reloadBtn');
 
-    let currentPage = 1;
-    let currentLimit = 10;
-    let currentFilters = {};
+        let currentPage = 1;
+        let currentLimit = 10;
+        let currentFilters = {};
 
-    function toastError(msg) { 
-        Toast.fire({ icon: 'error', title: msg }); 
-    }
+        function toastError(msg) {
+            Toast.fire({
+                icon: 'error',
+                title: msg
+            });
+        }
 
-    function toastSuccess(msg) { 
-        Toast.fire({ icon: 'success', title: msg }); 
-    }
+        function toastSuccess(msg) {
+            Toast.fire({
+                icon: 'success',
+                title: msg
+            });
+        }
 
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text ? String(text).replace(/[&<>"']/g, m => map[m]) : '-';
-    }
+        async function downloadFile(url, fallbackFilename) {
+            const response = await fetch(url, {
+                method: 'GET',
+                credentials: 'same-origin'
+            });
+            const contentType = response.headers.get('content-type') || '';
 
-    function loadLogs(page = 1) {
-        currentPage = page;
-        currentLimit = parseInt(rowsInput.value);
-        
-        currentFilters = {
-            action: 'list',
-            page: page,
-            limit: currentLimit,
-            search: searchInput.value || '',
-            start: startInput.value || '',
-            end: endInput.value || '',
-            status: statusInput.value || ''
-        };
-
-        const params = new URLSearchParams(currentFilters);
-
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm"></div> Loading...</td></tr>';
-
-        fetch('compliance_logs_action.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: params.toString()
-        })
-        .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'error') {
-                toastError(data.msg || 'Failed to load logs');
-                tbody.innerHTML = '<tr><td colspan="8" class="text-danger text-center">Error loading data</td></tr>';
-                return;
+                throw new Error('Download request failed.');
             }
 
-            tbody.innerHTML = '';
-            const rows = data.rows || [];
-            
-            if (!rows.length) {
-                tbody.innerHTML = '<tr><td colspan="8" class="text-muted text-center py-4"><i class="bi bi-inbox"></i> No logs found</td></tr>';
-                recordInfo.textContent = 'No records found';
-                recordInfoBottom.textContent = '';
-            } else {
-                const startRecord = ((currentPage - 1) * currentLimit) + 1;
-                const endRecord = Math.min(startRecord + rows.length - 1, data.total);
-                
-                rows.forEach((r, index) => {
-                    const badgeClass =
-                        r.compliance_status === 'Compliant' ? 'bg-success' :
-                        r.compliance_status === 'Non-Compliant' ? 'bg-danger' :
-                        r.compliance_status === 'Pending' ? 'bg-warning text-dark' :
-                        'bg-info text-dark';
+            if (contentType.includes('application/json')) {
+                const payload = await response.json();
+                throw new Error(payload.msg || payload.message || 'Export failed.');
+            }
 
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = objectUrl;
+            link.download = fallbackFilename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(objectUrl);
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text ? String(text).replace(/[&<>"']/g, m => map[m]) : '-';
+        }
+
+        function loadLogs(page = 1) {
+            currentPage = page;
+            currentLimit = parseInt(rowsInput.value);
+
+            currentFilters = {
+                action: 'list',
+                page: page,
+                limit: currentLimit,
+                search: searchInput.value || '',
+                start: startInput.value || '',
+                end: endInput.value || '',
+                status: statusInput.value || ''
+            };
+
+            const params = new URLSearchParams(currentFilters);
+
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm"></div> Loading...</td></tr>';
+
+            fetch('compliance_logs_action.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params.toString()
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'error') {
+                        toastError(data.msg || 'Failed to load logs');
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-danger text-center">Error loading data</td></tr>';
+                        return;
+                    }
+
+                    tbody.innerHTML = '';
+                    const rows = data.rows || [];
+
+                    if (!rows.length) {
+                        tbody.innerHTML = '<tr><td colspan="8" class="text-muted text-center py-4"><i class="bi bi-inbox"></i> No logs found</td></tr>';
+                        recordInfo.textContent = 'No records found';
+                        recordInfoBottom.textContent = '';
+                    } else {
+                        const startRecord = ((currentPage - 1) * currentLimit) + 1;
+                        const endRecord = Math.min(startRecord + rows.length - 1, data.total);
+
+                        rows.forEach((r, index) => {
+                            const badgeClass =
+                                r.compliance_status === 'Compliant' ? 'bg-success' :
+                                r.compliance_status === 'Non-Compliant' ? 'bg-danger' :
+                                r.compliance_status === 'Pending' ? 'bg-warning text-dark' :
+                                'bg-info text-dark';
+
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
                         <td>${startRecord + index}</td>
                         <td>${escapeHtml(r.full_name || r.username || 'System')}</td>
                         <td><small>${escapeHtml(r.action_type)}</small></td>
@@ -502,241 +537,243 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td><small>${escapeHtml(r.action_time)}</small></td>
                         <td><small>${escapeHtml(r.ip_address || '-')}</small></td>
                     `;
-                    tbody.appendChild(tr);
+                            tbody.appendChild(tr);
+                        });
+
+                        const infoText = `Showing ${startRecord} to ${endRecord} of ${data.total} entries`;
+                        recordInfo.textContent = infoText;
+                        recordInfoBottom.textContent = infoText;
+                    }
+
+                    // Build pagination
+                    pagination.innerHTML = '';
+                    const totalPages = Math.max(1, Math.ceil((data.total || 0) / currentLimit));
+
+                    // Previous button
+                    const prevLi = document.createElement('li');
+                    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+                    prevLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>`;
+                    pagination.appendChild(prevLi);
+
+                    // Page numbers (show max 5 pages)
+                    const maxPages = 5;
+                    let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+                    let endPage = Math.min(totalPages, startPage + maxPages - 1);
+
+                    if (endPage - startPage < maxPages - 1) {
+                        startPage = Math.max(1, endPage - maxPages + 1);
+                    }
+
+                    if (startPage > 1) {
+                        const li = document.createElement('li');
+                        li.className = 'page-item';
+                        li.innerHTML = `<a class="page-link" href="#" data-page="1">1</a>`;
+                        pagination.appendChild(li);
+
+                        if (startPage > 2) {
+                            const dots = document.createElement('li');
+                            dots.className = 'page-item disabled';
+                            dots.innerHTML = `<span class="page-link">...</span>`;
+                            pagination.appendChild(dots);
+                        }
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        const li = document.createElement('li');
+                        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                        li.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+                        pagination.appendChild(li);
+                    }
+
+                    if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                            const dots = document.createElement('li');
+                            dots.className = 'page-item disabled';
+                            dots.innerHTML = `<span class="page-link">...</span>`;
+                            pagination.appendChild(dots);
+                        }
+
+                        const li = document.createElement('li');
+                        li.className = 'page-item';
+                        li.innerHTML = `<a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>`;
+                        pagination.appendChild(li);
+                    }
+
+                    // Next button
+                    const nextLi = document.createElement('li');
+                    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+                    nextLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>`;
+                    pagination.appendChild(nextLi);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    toastError('Failed to load data. Please try again.');
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-danger text-center"><i class="bi bi-exclamation-triangle"></i> Failed to load data</td></tr>';
+                });
+        }
+
+        // Export PDF function
+        if (exportPdfBtn) {
+            exportPdfBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+
+                const passwordPrompt = await Swal.fire({
+                    title: 'Protect PDF Export',
+                    text: 'Enter a password required to open the exported PDF file.',
+                    input: 'password',
+                    inputLabel: 'PDF Password',
+                    inputPlaceholder: 'Enter at least 6 characters',
+                    inputAttributes: {
+                        maxlength: 64,
+                        autocapitalize: 'off',
+                        autocorrect: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Export PDF',
+                    cancelButtonText: 'Cancel',
+                    inputValidator: (value) => {
+                        if (!value || value.trim().length < 6) {
+                            return 'Please enter a password with at least 6 characters.';
+                        }
+                        return null;
+                    }
                 });
 
-                const infoText = `Showing ${startRecord} to ${endRecord} of ${data.total} entries`;
-                recordInfo.textContent = infoText;
-                recordInfoBottom.textContent = infoText;
-            }
-
-            // Build pagination
-            pagination.innerHTML = '';
-            const totalPages = Math.max(1, Math.ceil((data.total || 0) / currentLimit));
-            
-            // Previous button
-            const prevLi = document.createElement('li');
-            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-            prevLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>`;
-            pagination.appendChild(prevLi);
-            
-            // Page numbers (show max 5 pages)
-            const maxPages = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
-            let endPage = Math.min(totalPages, startPage + maxPages - 1);
-            
-            if (endPage - startPage < maxPages - 1) {
-                startPage = Math.max(1, endPage - maxPages + 1);
-            }
-            
-            if (startPage > 1) {
-                const li = document.createElement('li');
-                li.className = 'page-item';
-                li.innerHTML = `<a class="page-link" href="#" data-page="1">1</a>`;
-                pagination.appendChild(li);
-                
-                if (startPage > 2) {
-                    const dots = document.createElement('li');
-                    dots.className = 'page-item disabled';
-                    dots.innerHTML = `<span class="page-link">...</span>`;
-                    pagination.appendChild(dots);
+                if (!passwordPrompt.isConfirmed) {
+                    return;
                 }
-            }
-            
-            for (let i = startPage; i <= endPage; i++) {
-                const li = document.createElement('li');
-                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
-                li.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
-                pagination.appendChild(li);
-            }
-            
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    const dots = document.createElement('li');
-                    dots.className = 'page-item disabled';
-                    dots.innerHTML = `<span class="page-link">...</span>`;
-                    pagination.appendChild(dots);
-                }
-                
-                const li = document.createElement('li');
-                li.className = 'page-item';
-                li.innerHTML = `<a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>`;
-                pagination.appendChild(li);
-            }
-            
-            // Next button
-            const nextLi = document.createElement('li');
-            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-            nextLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>`;
-            pagination.appendChild(nextLi);
-        })
-        .catch(error => { 
-            console.error('Error:', error); 
-            toastError('Failed to load data. Please try again.');
-            tbody.innerHTML = '<tr><td colspan="8" class="text-danger text-center"><i class="bi bi-exclamation-triangle"></i> Failed to load data</td></tr>';
-        });
-    }
 
-    // Export PDF function
-    if (exportPdfBtn) {
-        exportPdfBtn.addEventListener('click', async function(e) {
+                const params = new URLSearchParams({
+                    export: 'pdf',
+                    search: searchInput.value || '',
+                    start: startInput.value || '',
+                    end: endInput.value || '',
+                    status: statusInput.value || '',
+                    pdf_password: passwordPrompt.value
+                });
+
+                const originalHTML = exportPdfBtn.innerHTML;
+                exportPdfBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Exporting...';
+                exportPdfBtn.disabled = true;
+
+                const exportUrl = 'compliance_logs_action.php?' + params.toString();
+
+                try {
+                    await downloadFile(
+                        exportUrl,
+                        'compliance_logs_' + new Date().toISOString().split('T')[0] + '.pdf'
+                    );
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'PDF Exported',
+                        text: 'Use the password you entered to open the PDF file.',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                } catch (error) {
+                    toastError(error.message || 'Failed to export PDF.');
+                }
+
+                // Restore button state
+                setTimeout(() => {
+                    exportPdfBtn.innerHTML = originalHTML;
+                    exportPdfBtn.disabled = false;
+                }, 1000);
+            });
+        }
+
+        // Export CSV function
+        if (exportCsvBtn) {
+            exportCsvBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const params = new URLSearchParams({
+                    export: 'csv',
+                    search: searchInput.value || '',
+                    start: startInput.value || '',
+                    end: endInput.value || '',
+                    status: statusInput.value || ''
+                });
+
+                const originalHTML = exportCsvBtn.innerHTML;
+                exportCsvBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Exporting...';
+                exportCsvBtn.disabled = true;
+
+                const exportUrl = 'compliance_logs_action.php?' + params.toString();
+
+                downloadFile(
+                    exportUrl,
+                    'compliance_logs_' + new Date().toISOString().split('T')[0] + '.csv'
+                ).catch((error) => {
+                    toastError(error.message || 'Failed to export CSV.');
+                });
+
+                // Restore button state
+                setTimeout(() => {
+                    exportCsvBtn.innerHTML = originalHTML;
+                    exportCsvBtn.disabled = false;
+                }, 1000);
+            });
+        }
+
+        // Initial load
+        loadLogs();
+
+        // Reload button - RESET ALL FILTERS
+        if (reloadBtn) {
+            reloadBtn.addEventListener('click', () => {
+                // Clear all filter inputs
+                searchInput.value = '';
+                startInput.value = '';
+                endInput.value = '';
+                statusInput.value = '';
+                rowsInput.value = '10';
+
+                // Reload data from page 1
+                loadLogs(1);
+            });
+        }
+
+        // Filter button
+        document.getElementById('filterBtn').addEventListener('click', e => {
             e.preventDefault();
 
-            const passwordPrompt = await Swal.fire({
-                title: 'Protect PDF Export',
-                text: 'Enter a password required to open the exported PDF file.',
-                input: 'password',
-                inputLabel: 'PDF Password',
-                inputPlaceholder: 'Enter at least 6 characters',
-                inputAttributes: { maxlength: 64, autocapitalize: 'off', autocorrect: 'off' },
-                showCancelButton: true,
-                confirmButtonText: 'Export PDF',
-                cancelButtonText: 'Cancel',
-                inputValidator: (value) => {
-                    if (!value || value.trim().length < 6) {
-                        return 'Please enter a password with at least 6 characters.';
-                    }
-                    return null;
-                }
-            });
-
-            if (!passwordPrompt.isConfirmed) {
-                return;
+            if (startInput.value && endInput.value && startInput.value > endInput.value) {
+                return toastError('Start date must be before end date.');
             }
 
-            const params = new URLSearchParams({
-                export: 'pdf',
-                search: searchInput.value || '',
-                start: startInput.value || '',
-                end: endInput.value || '',
-                status: statusInput.value || '',
-                pdf_password: passwordPrompt.value
-            });
-
-            const originalHTML = exportPdfBtn.innerHTML;
-            exportPdfBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Exporting...';
-            exportPdfBtn.disabled = true;
-
-            const exportUrl = 'compliance_logs_action.php?' + params.toString();
-
-            // Create a temporary link and trigger download
-            const link = document.createElement('a');
-            link.href = exportUrl;
-            link.download = 'compliance_logs_' + new Date().toISOString().split('T')[0] + '.pdf';
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            Swal.fire({
-                icon: 'info',
-                title: 'PDF Export Started',
-                text: 'Use the password you entered to open the PDF file.',
-                timer: 2500,
-                showConfirmButton: false
-            });
-
-            // Restore button state
-            setTimeout(() => {
-                exportPdfBtn.innerHTML = originalHTML;
-                exportPdfBtn.disabled = false;
-            }, 1000);
-        });
-    }
-
-    // Export CSV function
-    if (exportCsvBtn) {
-        exportCsvBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const params = new URLSearchParams({
-                export: 'csv',
-                search: searchInput.value || '',
-                start: startInput.value || '',
-                end: endInput.value || '',
-                status: statusInput.value || ''
-            });
-            
-            const originalHTML = exportCsvBtn.innerHTML;
-            exportCsvBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Exporting...';
-            exportCsvBtn.disabled = true;
-            
-            const exportUrl = 'compliance_logs_action.php?' + params.toString();
-            
-            // Create a temporary link and trigger download
-            const link = document.createElement('a');
-            link.href = exportUrl;
-            link.download = 'compliance_logs_' + new Date().toISOString().split('T')[0] + '.csv';
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Restore button state
-            setTimeout(() => {
-                exportCsvBtn.innerHTML = originalHTML;
-                exportCsvBtn.disabled = false;
-            }, 1000);
-        });
-    }
-
-    // Initial load
-    loadLogs();
-
-    // Reload button - RESET ALL FILTERS
-    if (reloadBtn) {
-        reloadBtn.addEventListener('click', () => {
-            // Clear all filter inputs
-            searchInput.value = '';
-            startInput.value = '';
-            endInput.value = '';
-            statusInput.value = '';
-            rowsInput.value = '10';
-            
-            // Reload data from page 1
             loadLogs(1);
         });
-    }
 
-    // Filter button
-    document.getElementById('filterBtn').addEventListener('click', e => {
-        e.preventDefault();
-        
-        if (startInput.value && endInput.value && startInput.value > endInput.value) {
-            return toastError('Start date must be before end date.');
-        }
-        
-        loadLogs(1);
-    });
-
-    // Rows per page change
-    rowsInput.addEventListener('change', () => {
-        loadLogs(1);
-    });
-
-    // Search on Enter key
-    searchInput.addEventListener('keypress', e => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
+        // Rows per page change
+        rowsInput.addEventListener('change', () => {
             loadLogs(1);
-        }
-    });
+        });
 
-    // Status filter change
-    statusInput.addEventListener('change', () => {
-        loadLogs(1);
-    });
-
-    // Pagination click handler
-    pagination.addEventListener('click', e => {
-        e.preventDefault();
-        
-        if (e.target.tagName === 'A' && !e.target.parentElement.classList.contains('disabled')) {
-            const page = parseInt(e.target.dataset.page);
-            if (page > 0) {
-                loadLogs(page);
+        // Search on Enter key
+        searchInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loadLogs(1);
             }
-        }
+        });
+
+        // Status filter change
+        statusInput.addEventListener('change', () => {
+            loadLogs(1);
+        });
+
+        // Pagination click handler
+        pagination.addEventListener('click', e => {
+            e.preventDefault();
+
+            if (e.target.tagName === 'A' && !e.target.parentElement.classList.contains('disabled')) {
+                const page = parseInt(e.target.dataset.page);
+                if (page > 0) {
+                    loadLogs(page);
+                }
+            }
+        });
     });
-});
 </script>

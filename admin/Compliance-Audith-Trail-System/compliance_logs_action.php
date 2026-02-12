@@ -18,7 +18,8 @@ if (!isset($conn) || $conn->connect_error) {
 /**
  * Build WHERE clause for filtering
  */
-function buildWhereClause($search, $start, $end, $status) {
+function buildWhereClause($search, $start, $end, $status)
+{
     $where = [];
     $params = [];
     $types = '';
@@ -58,25 +59,26 @@ function buildWhereClause($search, $start, $end, $status) {
 /**
  * Load TCPDF library from various possible locations
  */
-function loadTCPDF() {
+function loadTCPDF()
+{
     if (class_exists('TCPDF')) {
         return true;
     }
-    
+
     // Possible autoload paths (relative to coreT2 root)
     $autoloadPaths = [
         __DIR__ . '/../../vendor/autoload.php',
         __DIR__ . '/../../../vendor/autoload.php',
         __DIR__ . '/../../../../vendor/autoload.php',
     ];
-    
+
     // Possible direct TCPDF paths
     $tcpdfPaths = [
         __DIR__ . '/../../vendor/tecnickcom/tcpdf/tcpdf.php',
         __DIR__ . '/../../libs/tcpdf/tcpdf.php',
         __DIR__ . '/../libs/tcpdf/tcpdf.php',
     ];
-    
+
     // Try autoload first (preferred method)
     foreach ($autoloadPaths as $path) {
         if (file_exists($path)) {
@@ -86,7 +88,7 @@ function loadTCPDF() {
             }
         }
     }
-    
+
     // Try direct TCPDF include as fallback
     foreach ($tcpdfPaths as $path) {
         if (file_exists($path)) {
@@ -96,13 +98,47 @@ function loadTCPDF() {
             }
         }
     }
-    
+
     return false;
 }
 
+/**
+ * Send PDF as clean binary download to avoid corruption.
+ */
+function outputPdfDownload(TCPDF $pdf, string $filename): void
+{
+    // Remove any buffered output that can corrupt PDF binary
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
 
-class ComplianceExportPDF extends TCPDF {
-    public function Header(): void {
+    $binary = $pdf->Output($filename, 'S');
+
+    if ($binary === '') {
+        throw new Exception('Generated PDF content is empty.');
+    }
+
+    if (!headers_sent()) {
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Accept-Ranges: bytes');
+        header('Content-Length: ' . strlen($binary));
+        header('Cache-Control: private, no-transform, no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: public');
+        header('Expires: 0');
+        header('X-Content-Type-Options: nosniff');
+    }
+
+    echo $binary;
+    exit;
+}
+
+
+class ComplianceExportPDF extends TCPDF
+{
+    public function Header(): void
+    {
         $leftMargin = 10;
         $top = 8;
         $width = 277;
@@ -128,7 +164,8 @@ class ComplianceExportPDF extends TCPDF {
         $this->Cell(0, 5, 'Compliance & Audit Trail Report', 0, 0, 'L');
     }
 
-    public function Footer(): void {
+    public function Footer(): void
+    {
         $this->SetY(-12);
         $this->SetFont('helvetica', 'I', 8);
         $this->SetTextColor(20, 83, 45);
@@ -170,19 +207,19 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         ";
 
         $stmt = $conn->prepare($sql);
-        
+
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $conn->error);
         }
-        
+
         if ($types !== '' && count($params) > 0) {
             $stmt->bind_param($types, ...$params);
         }
-        
+
         if (!$stmt->execute()) {
             throw new Exception("Failed to execute query: " . $stmt->error);
         }
-        
+
         $result = $stmt->get_result();
 
         // Set headers for CSV download
@@ -196,7 +233,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         $output = fopen('php://output', 'w');
 
         // Add BOM for Excel UTF-8 compatibility
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
         // CSV Headers
         fputcsv($output, [
@@ -229,7 +266,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         fclose($output);
         $stmt->close();
         exit;
-
     } catch (Exception $e) {
         error_log("CSV Export Error: " . $e->getMessage());
         error_log("Stack trace: " . $e->getTraceAsString());
@@ -241,6 +277,9 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 
 // Handle PDF Export
 if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
+    // Avoid PHP warning/notice output corrupting PDF stream
+    ini_set('display_errors', '0');
+
     // Try to load TCPDF
     if (!loadTCPDF()) {
         error_log("TCPDF library not found in any expected location");
@@ -252,7 +291,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         ]);
         exit;
     }
-    
+
     try {
         $search = trim($_GET['search'] ?? '');
         $start = trim($_GET['start'] ?? '');
@@ -296,19 +335,19 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         ";
 
         $stmt = $conn->prepare($sql);
-        
+
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $conn->error);
         }
-        
+
         if ($types !== '' && count($params) > 0) {
             $stmt->bind_param($types, ...$params);
         }
-        
+
         if (!$stmt->execute()) {
             throw new Exception("Failed to execute query: " . $stmt->error);
         }
-        
+
         $result = $stmt->get_result();
 
         // Create PDF using TCPDF
@@ -402,18 +441,12 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         $html .= '</tbody></table>';
 
         $pdf->writeHTML($html, true, false, true, false, '');
-        
-        $stmt->close();
 
-        if (ob_get_length()) {
-            ob_end_clean();
-        }
+        $stmt->close();
 
         // Output PDF
         $filename = 'compliance_logs_' . date('Y-m-d_His') . '.pdf';
-        $pdf->Output($filename, 'D');
-        exit;
-
+        outputPdfDownload($pdf, $filename);
     } catch (Exception $e) {
         error_log("PDF Export Error: " . $e->getMessage());
         error_log("Stack trace: " . $e->getTraceAsString());
@@ -426,7 +459,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
 // Handle AJAX List Request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
-    
+
     try {
         $action = $_POST['action'] ?? '';
 
@@ -449,19 +482,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Count total records
             $countSQL = "SELECT COUNT(*) AS total FROM audit_trail a LEFT JOIN users u ON a.user_id = u.user_id $whereSQL";
             $stmt = $conn->prepare($countSQL);
-            
+
             if (!$stmt) {
                 throw new Exception("Failed to prepare count statement: " . $conn->error);
             }
-            
+
             if ($types !== '' && count($params) > 0) {
                 $stmt->bind_param($types, ...$params);
             }
-            
+
             if (!$stmt->execute()) {
                 throw new Exception("Failed to execute count query: " . $stmt->error);
             }
-            
+
             $total = $stmt->get_result()->fetch_assoc()['total'] ?? 0;
             $stmt->close();
 
@@ -487,11 +520,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ";
 
             $stmt = $conn->prepare($sql);
-            
+
             if (!$stmt) {
                 throw new Exception("Failed to prepare select statement: " . $conn->error);
             }
-            
+
             // Bind all parameters including LIMIT and OFFSET
             if ($types !== '' && count($params) > 0) {
                 $allParams = array_merge($params, [$limit, $offset]);
@@ -500,11 +533,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $stmt->bind_param('ii', $limit, $offset);
             }
-            
+
             if (!$stmt->execute()) {
                 throw new Exception("Failed to execute select query: " . $stmt->error);
             }
-            
+
             $result = $stmt->get_result();
 
             $rows = [];
@@ -539,7 +572,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         echo json_encode(['status' => 'error', 'msg' => 'Invalid action']);
         exit;
-
     } catch (Exception $e) {
         error_log("Compliance Logs Error: " . $e->getMessage());
         error_log("Stack trace: " . $e->getTraceAsString());
@@ -555,4 +587,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 http_response_code(400);
 echo json_encode(['status' => 'error', 'msg' => 'Invalid request method']);
 exit;
-?>
