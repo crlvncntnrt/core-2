@@ -579,23 +579,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Export PDF function
     if (exportPdfBtn) {
-        exportPdfBtn.addEventListener('click', function(e) {
+        exportPdfBtn.addEventListener('click', async function(e) {
             e.preventDefault();
-            
+
+            const passwordPrompt = await Swal.fire({
+                title: 'Protect PDF Export',
+                text: 'Enter a password required to open the exported PDF file.',
+                input: 'password',
+                inputLabel: 'PDF Password',
+                inputPlaceholder: 'Enter at least 6 characters',
+                inputAttributes: { maxlength: 64, autocapitalize: 'off', autocorrect: 'off' },
+                showCancelButton: true,
+                confirmButtonText: 'Export PDF',
+                cancelButtonText: 'Cancel',
+                inputValidator: (value) => {
+                    if (!value || value.trim().length < 6) {
+                        return 'Please enter a password with at least 6 characters.';
+                    }
+                    return null;
+                }
+            });
+
+            if (!passwordPrompt.isConfirmed) {
+                return;
+            }
+
             const params = new URLSearchParams({
                 export: 'pdf',
                 search: searchInput.value || '',
                 start: startInput.value || '',
                 end: endInput.value || '',
-                status: statusInput.value || ''
+                status: statusInput.value || '',
+                pdf_password: passwordPrompt.value
             });
-            
+
             const originalHTML = exportPdfBtn.innerHTML;
             exportPdfBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Exporting...';
             exportPdfBtn.disabled = true;
-            
+
             const exportUrl = 'compliance_logs_action.php?' + params.toString();
-            
+
             // Create a temporary link and trigger download
             const link = document.createElement('a');
             link.href = exportUrl;
@@ -604,7 +627,15 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
+
+            Swal.fire({
+                icon: 'info',
+                title: 'PDF Export Started',
+                text: 'Use the password you entered to open the PDF file.',
+                timer: 2500,
+                showConfirmButton: false
+            });
+
             // Restore button state
             setTimeout(() => {
                 exportPdfBtn.innerHTML = originalHTML;

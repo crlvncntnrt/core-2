@@ -953,31 +953,52 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('reloadBtn').addEventListener('click', () => loadData());
 
     // Export PDF - NO SUCCESS MESSAGE
-    document.getElementById('exportPdfBtn').addEventListener('click', function() {
+    document.getElementById('exportPdfBtn').addEventListener('click', async function() {
         if (allDisbursements.length === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'No Data',
-                text: 'No data available to export'
-            });
+            Swal.fire({ icon: 'warning', title: 'No Data', text: 'No data available to export' });
             return;
         }
+
+        const passwordPrompt = await Swal.fire({
+            title: 'Protect PDF Export',
+            text: 'Enter a password before exporting this PDF.',
+            input: 'password',
+            inputLabel: 'PDF Password',
+            inputPlaceholder: 'At least 6 characters',
+            showCancelButton: true,
+            confirmButtonText: 'Export PDF',
+            cancelButtonText: 'Cancel',
+            inputValidator: (value) => (!value || value.trim().length < 6) ? 'Please enter at least 6 characters.' : null
+        });
+
+        if (!passwordPrompt.isConfirmed) return;
+        const pdfPassword = passwordPrompt.value;
 
         try {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
+            if (typeof doc.setEncryption !== 'function') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'PDF Security Not Supported',
+                    text: 'Password-protected PDF export is not supported by this browser build.'
+                });
+                return;
+            }
+            doc.setEncryption({ userPassword: pdfPassword, ownerPassword: pdfPassword });
 
-            doc.setFontSize(18);
+            doc.setFillColor(15, 23, 42);
+            doc.roundedRect(10, 8, 277, 18, 2, 2, 'F');
+            doc.setFontSize(16);
+            doc.setTextColor(255, 255, 255);
+            doc.text('Disbursement Tracker Report', 14, 19);
+
+            doc.setFontSize(9);
+            doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 24);
+
             doc.setTextColor(40, 40, 40);
-            doc.text('Disbursement Tracker Report', 14, 15);
-            
-            doc.setFontSize(10);
-            doc.setTextColor(100, 100, 100);
-            doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
-            
-            doc.setFontSize(12);
-            doc.setTextColor(40, 40, 40);
-            doc.text('Summary', 14, 32);
+            doc.setFontSize(11);
+            doc.text('Summary', 14, 34);
             doc.setFontSize(10);
 
             const total = document.getElementById('card_total').textContent;
@@ -985,51 +1006,44 @@ document.addEventListener('DOMContentLoaded', function() {
             const pending = document.getElementById('card_pending').textContent;
             const amount = document.getElementById('card_amount').textContent;
 
-            doc.text(`Total: ${total}`, 14, 38);
-            doc.text(`Released: ${released}`, 70, 38);
-            doc.text(`Pending: ${pending}`, 126, 38);
-            doc.text(`Amount: ${amount}`, 182, 38);
+            doc.text(`Total: ${total}`, 14, 40);
+            doc.text(`Released: ${released}`, 70, 40);
+            doc.text(`Pending: ${pending}`, 126, 40);
+            doc.text(`Amount: ${amount}`, 182, 40);
 
             if (currentFilters.cardFilter !== 'all') {
                 doc.setFontSize(9);
                 doc.setTextColor(200, 0, 0);
-                doc.text(`Filter: ${filterIndicator.textContent}`, 14, 44);
+                doc.text(`Filter: ${filterIndicator.textContent}`, 14, 46);
             }
 
             const tableData = allDisbursements.map(d => [
                 d.disbursement_id, d.loan_id, d.member_name || 'N/A', d.disbursement_date,
-                `₱${Number(d.amount).toLocaleString()}`, d.fund_source || '-',
-                d.status, d.approved_by_name || '-'
+                `₱${Number(d.amount).toLocaleString()}`, d.fund_source || '-', d.status, d.approved_by_name || '-'
             ]);
 
             doc.autoTable({
-                startY: currentFilters.cardFilter !== 'all' ? 48 : 44,
+                startY: currentFilters.cardFilter !== 'all' ? 50 : 46,
                 head: [['ID', 'Loan ID', 'Member', 'Date', 'Amount', 'Fund', 'Status', 'Approved By']],
                 body: tableData,
                 styles: { fontSize: 8, cellPadding: 2 },
-                headStyles: { fillColor: [5, 150, 105], textColor: 255, fontStyle: 'bold' },
-                alternateRowStyles: { fillColor: [245, 245, 245] }
+                headStyles: { fillColor: [30, 64, 175], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [241, 245, 249] }
             });
 
             const pageCount = doc.internal.getNumberOfPages();
             for (let i = 1; i <= pageCount; i++) {
                 doc.setPage(i);
                 doc.setFontSize(8);
-                doc.setTextColor(150);
-                doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+                doc.setTextColor(120);
+                doc.text(`Confidential • Page ${i} of ${pageCount}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 8, { align: 'center' });
             }
 
             doc.save(`disbursement_tracker_${new Date().toISOString().split('T')[0]}.pdf`);
-            
-            // NO SUCCESS MESSAGE - PDF downloads silently
-            
+            Swal.fire({ icon: 'info', title: 'PDF Exported', text: 'Use your entered password to open the PDF.', timer: 2200, showConfirmButton: false });
         } catch (err) {
             console.error('PDF Export Error:', err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Export Failed',
-                text: 'Failed to export PDF: ' + err.message
-            });
+            Swal.fire({ icon: 'error', title: 'Export Failed', text: 'Failed to export PDF: ' + err.message });
         }
     });
 
