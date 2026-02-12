@@ -237,6 +237,17 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         exit;
     }
     
+    if (!class_exists('ComplianceExportPDF', false)) {
+        class ComplianceExportPDF extends TCPDF {
+            public function Footer() {
+                $this->SetY(-12);
+                $this->SetFont('helvetica', 'I', 8);
+                $this->SetTextColor(120, 120, 120);
+                $this->Cell(0, 8, 'Confidential - Compliance Monitoring - Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, 0, 'C');
+            }
+        }
+    }
+
     try {
         $search = trim($_GET['search'] ?? '');
         $start = trim($_GET['start'] ?? '');
