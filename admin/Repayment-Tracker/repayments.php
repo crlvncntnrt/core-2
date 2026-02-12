@@ -1262,6 +1262,7 @@ include(__DIR__ . '/../inc/sidebar.php');
             }
 
             doc.save(`repayment_tracker_${new Date().toISOString().split('T')[0]}.pdf`);
+            Swal.fire({ icon: 'info', title: 'PDF Exported', text: 'Use your entered password to open the PDF.', timer: 2200, showConfirmButton: false });
         });
 
         function debounce(func, wait) {

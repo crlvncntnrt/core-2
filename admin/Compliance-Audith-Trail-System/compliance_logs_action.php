@@ -100,6 +100,16 @@ function loadTCPDF() {
     return false;
 }
 
+
+class ComplianceExportPDF extends TCPDF {
+    public function Footer(): void {
+        $this->SetY(-12);
+        $this->SetFont('helvetica', 'I', 8);
+        $this->SetTextColor(120, 120, 120);
+        $this->Cell(0, 8, 'Confidential - Compliance Monitoring - Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, 0, 'C');
+    }
+}
+
 // Handle CSV Export
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     try {

@@ -1115,6 +1115,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
             const filename = `Loan_Portfolio_Report_${new Date().toISOString().slice(0, 10)}.pdf`;
             doc.save(filename);
+            Swal.fire({ icon: 'info', title: 'PDF Exported', text: 'Use your entered password to open the PDF.', timer: 2200, showConfirmButton: false });
         });
 
         // --- Pagination ---
