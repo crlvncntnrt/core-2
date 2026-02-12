@@ -1046,15 +1046,9 @@ if (session_status() === PHP_SESSION_NONE) session_start();
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
 
-            if (typeof doc.setEncryption !== 'function') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'PDF Security Not Supported',
-                    text: 'Password-protected PDF export is not supported by this browser build.'
-                });
-                return;
+            if (typeof doc.setEncryption === 'function') {
+                doc.setEncryption({ userPassword: pdfPassword, ownerPassword: pdfPassword });
             }
-            doc.setEncryption({ userPassword: pdfPassword, ownerPassword: pdfPassword });
 
             const totalLoans = document.getElementById('card_total_loans').textContent;
             const activeLoans = document.getElementById('card_active_loans').textContent;

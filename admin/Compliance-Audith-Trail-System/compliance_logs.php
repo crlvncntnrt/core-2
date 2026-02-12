@@ -628,14 +628,6 @@ document.addEventListener('DOMContentLoaded', function() {
             link.click();
             document.body.removeChild(link);
 
-            Swal.fire({
-                icon: 'info',
-                title: 'PDF Export Started',
-                text: 'Use the password you entered to open the PDF file.',
-                timer: 2500,
-                showConfirmButton: false
-            });
-
             // Restore button state
             setTimeout(() => {
                 exportPdfBtn.innerHTML = originalHTML;

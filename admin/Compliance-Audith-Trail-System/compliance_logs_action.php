@@ -117,6 +117,17 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         $start = trim($_GET['start'] ?? '');
         $end = trim($_GET['end'] ?? '');
         $status = trim($_GET['status'] ?? '');
+        $pdfPassword = trim($_GET['pdf_password'] ?? '');
+
+        if (strlen($pdfPassword) < 6) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Export failed. PDF password must be at least 6 characters.',
+                'msg' => 'Export failed. PDF password must be at least 6 characters.'
+            ]);
+            exit;
+        }
 
         // Build WHERE clause
         $filterData = buildWhereClause($search, $start, $end, $status);
@@ -285,7 +296,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         $result = $stmt->get_result();
 
         // Create PDF using TCPDF
-        $pdf = new ComplianceExportPDF('L', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8', false);
 
         $pdf->SetCreator('Compliance System');
         $pdf->SetAuthor('Admin');
@@ -372,6 +383,11 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         }
         
         $stmt->close();
+
+        $pdf->SetY(-12);
+        $pdf->SetFont('helvetica', 'I', 8);
+        $pdf->SetTextColor(120, 120, 120);
+        $pdf->Cell(0, 8, 'Confidential • Compliance Monitoring • Page ' . $pdf->getAliasNumPage() . '/' . $pdf->getAliasNbPages(), 0, 0, 'C');
 
         // Output PDF
         $filename = 'compliance_logs_' . date('Y-m-d_His') . '.pdf';
