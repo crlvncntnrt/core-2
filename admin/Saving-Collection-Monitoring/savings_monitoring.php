@@ -11,9 +11,6 @@ include(__DIR__ . '/../inc/navbar.php');
 include(__DIR__ . '/../inc/sidebar.php');
 ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-
 <style>
     :root {
         --brand-primary: #059669;
@@ -420,9 +417,6 @@ include(__DIR__ . '/../inc/sidebar.php');
                         <button id="syncCore1Btn" class="btn btn-sm btn-outline-light btn-sync" title="Pull latest savings from Core1">
                             <i class="bi bi-arrow-repeat"></i> Sync Core1
                         </button>
-                        <button class="btn btn-sm btn-danger" id="exportPdfBtn">
-                            <i class="bi bi-file-earmark-pdf"></i> Export PDF
-                        </button>
                         <a id="exportCsvBtn" class="btn btn-sm btn-success" href="#">
                             <i class="bi bi-file-earmark-spreadsheet"></i> Export CSV
                         </a>
@@ -800,7 +794,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearFilters = document.getElementById('clearFilters');
 
     const exportCsvBtn = document.getElementById('exportCsvBtn');
-    const exportPdfBtn = document.getElementById('exportPdfBtn');
     const addTxBtn = document.getElementById('addTxBtn');
 
     const filterIndicator = document.getElementById('filterIndicator');
@@ -1058,63 +1051,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentPage = 1;
             loadData();
         });
-    });
-
-    exportPdfBtn.addEventListener('click', function() {
-        if (allTransactionsData.length === 0) {
-            Swal.fire('No Data', 'No transactions available to export', 'info');
-            return;
-        }
-
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-
-        doc.setFontSize(18);
-        doc.setTextColor(40, 40, 40);
-        doc.text('Savings Monitoring Report', 14, 15);
-
-        doc.setFontSize(10);
-        doc.setTextColor(100, 100, 100);
-        doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
-
-        doc.setFontSize(12);
-        doc.setTextColor(40, 40, 40);
-        doc.text('Summary', 14, 32);
-
-        doc.setFontSize(10);
-        doc.text(`Total Transactions: ${summaryData.total || 0}`, 14, 38);
-        doc.text(`Total Deposits: ${summaryData.total_deposits || 0}`, 70, 38);
-        doc.text(`Total Withdrawals: ${summaryData.total_withdrawals || 0}`, 126, 38);
-        doc.text(`Current Balance: ₱${parseFloat(summaryData.last_balance || 0).toLocaleString()}`, 14, 44);
-
-        const tableData = allTransactionsData.map(r => [
-            r.saving_id,
-            r.member_id,
-            r.transaction_date,
-            r.transaction_type,
-            `₱${Number(r.amount).toLocaleString(undefined, {minimumFractionDigits:2})}`,
-            `₱${Number(r.balance).toLocaleString(undefined, {minimumFractionDigits:2})}`,
-            r.recorded_by_name || '-'
-        ]);
-
-        doc.autoTable({
-            startY: 50,
-            head: [['ID','Member ID','Date','Type','Amount','Balance','Recorded By']],
-            body: tableData,
-            styles: { fontSize: 9, cellPadding: 3 },
-            headStyles: { fillColor: [5,150,105], textColor: 255, fontStyle: 'bold' },
-            alternateRowStyles: { fillColor: [245,245,245] }
-        });
-
-        const pageCount = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
-            doc.setFontSize(8);
-            doc.setTextColor(150);
-            doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.width/2, doc.internal.pageSize.height - 10, { align:'center' });
-        }
-
-        doc.save(`Savings_Report_${new Date().toISOString().slice(0,10)}.pdf`);
     });
 
     addTxBtn.addEventListener('click', () => {
