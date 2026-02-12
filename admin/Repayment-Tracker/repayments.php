@@ -1197,15 +1197,9 @@ include(__DIR__ . '/../inc/sidebar.php');
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
-            if (typeof doc.setEncryption !== 'function') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'PDF Security Not Supported',
-                    text: 'Password-protected PDF export is not supported by this browser build.'
-                });
-                return;
+            if (typeof doc.setEncryption === 'function') {
+                doc.setEncryption({ userPassword: pdfPassword, ownerPassword: pdfPassword });
             }
-            doc.setEncryption({ userPassword: pdfPassword, ownerPassword: pdfPassword });
 
             doc.setFillColor(15, 23, 42);
             doc.roundedRect(10, 8, 277, 18, 2, 2, 'F');
