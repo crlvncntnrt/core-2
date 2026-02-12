@@ -209,8 +209,9 @@ if (isset($_GET['export']) && $_GET['export'] === 'pdf') {
         error_log("TCPDF library not found in any expected location");
         header('Content-Type: application/json');
         echo json_encode([
-            'status' => 'error', 
-            'msg' => 'PDF library not available. Please use CSV export or install TCPDF via Composer: composer require tecnickcom/tcpdf'
+            'status' => 'error',
+            'message' => 'Export failed. PDF library not found. No composer needed if you place TCPDF at: admin/libs/tcpdf/tcpdf.php',
+            'msg' => 'Export failed. PDF library not found. No composer needed if you place TCPDF at: admin/libs/tcpdf/tcpdf.php'
         ]);
         exit;
     }
