@@ -444,8 +444,9 @@ $default_logo = '/dist/img/default-logo.png';
             <span>Compliance & Audit</span>
         </a>
 
+        <?php if (in_array($_SESSION['userdata']['role'], ['Super Admin', 'Admin'])): ?>
         <div class="menu-heading">System Admin</div>
-
+        
         <!-- User Management with Submenu -->
         <button class="btn menu-btn w-100 text-start d-flex align-items-center justify-content-between mt-2 px-3 py-3"
             data-bs-toggle="collapse"
@@ -472,8 +473,13 @@ $default_logo = '/dist/img/default-logo.png';
                     class="submenu-link <?= is_active('permission_logs.php', $current_path) ? 'active' : '' ?>">
                     Permission Logs
                 </a>
+                <a href="<?= $base_url ?>/User-Management-Role-Based-Access/profile_requests.php"
+                    class="submenu-link <?= is_active('profile_requests.php', $current_path) ? 'active' : '' ?>">
+                    Approval Requests
+                </a>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- System Status -->
         <div class="system-status">
@@ -549,6 +555,7 @@ $default_logo = '/dist/img/default-logo.png';
             <span>Compliance & Audit</span>
         </a>
 
+        <?php if (in_array($_SESSION['userdata']['role'], ['Super Admin', 'Admin'])): ?>
         <div class="menu-heading">System Admin</div>
 
         <button class="btn menu-btn w-100 text-start d-flex align-items-center justify-content-between mt-2 px-3 py-3"
@@ -576,8 +583,13 @@ $default_logo = '/dist/img/default-logo.png';
                     class="submenu-link <?= is_active('permission_logs.php', $current_path) ? 'active' : '' ?>">
                     Permission Logs
                 </a>
+                <a href="<?= $base_url ?>/User-Management-Role-Based-Access/profile_requests.php"
+                    class="submenu-link <?= is_active('profile_requests.php', $current_path) ? 'active' : '' ?>">
+                    Approval Requests
+                </a>
             </div>
         </div>
+        <?php endif; ?>
 
         <div class="system-status">
             <div class="status-indicator">

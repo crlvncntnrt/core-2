@@ -612,7 +612,7 @@ include(__DIR__ . '/../inc/sidebar.php');
                 });
         }
 
-        // Export PDF function
+        // Export PDF function (Server-side Generation)
         if (exportPdfBtn) {
             exportPdfBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
@@ -639,9 +639,8 @@ include(__DIR__ . '/../inc/sidebar.php');
                     }
                 });
 
-                if (!passwordPrompt.isConfirmed) {
-                    return;
-                }
+                if (!passwordPrompt.isConfirmed) return;
+                const pdfPassword = passwordPrompt.value;
 
                 const params = new URLSearchParams({
                     export: 'pdf',
@@ -649,51 +648,61 @@ include(__DIR__ . '/../inc/sidebar.php');
                     start: startInput.value || '',
                     end: endInput.value || '',
                     status: statusInput.value || '',
-                    pdf_password: passwordPrompt.value
+                    pdf_password: pdfPassword
                 });
 
                 const originalHTML = exportPdfBtn.innerHTML;
-                exportPdfBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Exporting...';
+                exportPdfBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
                 exportPdfBtn.disabled = true;
 
-                const exportUrl = 'compliance_logs_action.php?' + params.toString();
-
                 try {
-                    await downloadFile(
-                        exportUrl,
-                        'compliance_logs_' + new Date().toISOString().split('T')[0] + '.pdf'
-                    );
+                    const url = 'compliance_logs_action.php?' + params.toString();
+                    await downloadFile(url, `compliance_logs_${new Date().toISOString().split('T')[0]}.pdf`);
 
                     Swal.fire({
                         icon: 'success',
                         title: 'PDF Exported',
-                        text: 'Use the password you entered to open the PDF file.',
-                        timer: 2500,
+                        text: 'Use your password to open the file.',
+                        timer: 3000,
                         showConfirmButton: false
                     });
                 } catch (error) {
                     toastError(error.message || 'Failed to export PDF.');
                 }
 
-                // Restore button state
-                setTimeout(() => {
-                    exportPdfBtn.innerHTML = originalHTML;
-                    exportPdfBtn.disabled = false;
-                }, 1000);
+                exportPdfBtn.innerHTML = originalHTML;
+                exportPdfBtn.disabled = false;
             });
         }
 
+
         // Export CSV function
         if (exportCsvBtn) {
-            exportCsvBtn.addEventListener('click', function(e) {
+            exportCsvBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
+
+                const passwordPrompt = await Swal.fire({
+                    title: 'Protect CSV Export',
+                    text: 'Enter a password to encrypt this CSV export in a ZIP file.',
+                    input: 'password',
+                    inputLabel: 'Export Password',
+                    inputPlaceholder: 'At least 6 characters',
+                    showCancelButton: true,
+                    confirmButtonText: 'Export CSV',
+                    cancelButtonText: 'Cancel',
+                    inputValidator: (value) => (!value || value.trim().length < 6) ? 'Please enter at least 6 characters.' : null
+                });
+
+                if (!passwordPrompt.isConfirmed) return;
+                const pdfPassword = passwordPrompt.value;
 
                 const params = new URLSearchParams({
                     export: 'csv',
                     search: searchInput.value || '',
                     start: startInput.value || '',
                     end: endInput.value || '',
-                    status: statusInput.value || ''
+                    status: statusInput.value || '',
+                    pdf_password: pdfPassword
                 });
 
                 const originalHTML = exportCsvBtn.innerHTML;
@@ -702,18 +711,26 @@ include(__DIR__ . '/../inc/sidebar.php');
 
                 const exportUrl = 'compliance_logs_action.php?' + params.toString();
 
-                downloadFile(
-                    exportUrl,
-                    'compliance_logs_' + new Date().toISOString().split('T')[0] + '.csv'
-                ).catch((error) => {
+                try {
+                    await downloadFile(
+                        exportUrl,
+                        'compliance_logs_' + new Date().toISOString().split('T')[0] + (pdfPassword ? '.zip' : '.csv')
+                    );
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'CSV Exported',
+                        text: pdfPassword ? 'The ZIP file is password protected.' : 'File downloaded successfully.',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                } catch (error) {
                     toastError(error.message || 'Failed to export CSV.');
-                });
+                }
 
                 // Restore button state
-                setTimeout(() => {
-                    exportCsvBtn.innerHTML = originalHTML;
-                    exportCsvBtn.disabled = false;
-                }, 1000);
+                exportCsvBtn.innerHTML = originalHTML;
+                exportCsvBtn.disabled = false;
             });
         }
 

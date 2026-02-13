@@ -439,6 +439,9 @@ include(__DIR__ . '/../inc/sidebar.php');
                         <button id="exportPdfBtn" class="btn btn-sm btn-danger">
                             <i class="bi bi-file-earmark-pdf"></i> Export PDF
                         </button>
+                        <button id="exportExcelBtn" class="btn btn-sm btn-success">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Export Excel
+                        </button>
                         <button id="reloadBtn" class="btn btn-sm btn-outline-light">
                             <i class="bi bi-arrow-clockwise"></i> Reload
                         </button>
@@ -677,7 +680,7 @@ include(__DIR__ . '/../inc/sidebar.php');
             }
 
             try {
-                const response = await fetch('send_notification.php', {
+                const response = await fetch('/admin/Repayment-Tracker/send_ai_message.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1175,11 +1178,6 @@ include(__DIR__ . '/../inc/sidebar.php');
 
         // Export PDF
         document.getElementById('exportPdfBtn').addEventListener('click', async function() {
-            if (allLoans.length === 0) {
-                alert('No data to export');
-                return;
-            }
-
             const passwordPrompt = await Swal.fire({
                 title: 'Protect PDF Export',
                 text: 'Enter a password before exporting this PDF.',
@@ -1195,102 +1193,133 @@ include(__DIR__ . '/../inc/sidebar.php');
             if (!passwordPrompt.isConfirmed) return;
             const pdfPassword = passwordPrompt.value;
 
-            const {
-                jsPDF
-            } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4');
-            let hasEncryption = false;
-            if (typeof doc.setEncryption === 'function') {
-                doc.setEncryption({
-                    userPassword: pdfPassword,
-                    ownerPassword: pdfPassword
-                });
-                hasEncryption = true;
-            }
-
-            await addCompanyPdfHeader(doc, 'Collection Monitoring & Recovery Report');
-
-            doc.setTextColor(40, 40, 40);
-            doc.setFontSize(11);
-            doc.text('Summary', 14, 37);
-
-            doc.setFontSize(10);
-            const totalLoans = document.getElementById('card_total_loans').textContent;
-            const activeLoans = document.getElementById('card_active_loans').textContent;
-            const overdueLoans = document.getElementById('card_overdue_loans').textContent;
-            const atRiskLoans = document.getElementById('card_at_risk_loans').textContent;
-
-            doc.text(`Total Loans: ${totalLoans}`, 14, 43);
-            doc.text(`Active: ${activeLoans}`, 70, 43);
-            doc.text(`Overdue: ${overdueLoans}`, 126, 43);
-            doc.text(`At Risk: ${atRiskLoans}`, 182, 43);
-
-            if (currentFilters.cardFilter !== 'all') {
-                doc.setFontSize(9);
-                doc.setTextColor(200, 0, 0);
-                doc.text(`Filter Applied: ${filterIndicator.textContent}`, 14, 49);
-            }
-
-            const tableData = allLoans.map(l => [
-                l.loan_id,
-                l.member_name,
-                l.loan_type,
-                `₱${Number(l.principal_amount).toLocaleString('en-PH', {minimumFractionDigits: 2})}`,
-                `${l.interest_rate}%`,
-                `${l.loan_term} mo`,
-                l.start_date,
-                l.status,
-                l.overdue_count || 0,
-                l.risk_level
-            ]);
-
-            doc.autoTable({
-                startY: currentFilters.cardFilter !== 'all' ? 53 : 49,
-                head: [
-                    ['ID', 'Member', 'Type', 'Principal', 'Rate', 'Term', 'Start', 'Status', 'Overdue', 'Risk']
-                ],
-                body: tableData,
-                styles: {
-                    fontSize: 8,
-                    cellPadding: 2
-                },
-                headStyles: {
-                    fillColor: [20, 83, 45],
-                    textColor: 255,
-                    fontStyle: 'bold'
-                },
-                alternateRowStyles: {
-                    fillColor: [241, 245, 249]
-                }
+            const params = new URLSearchParams({
+                export: 'pdf',
+                search: currentFilters.search,
+                status: currentFilters.status,
+                risk: currentFilters.risk,
+                type: currentFilters.type,
+                cardFilter: currentFilters.cardFilter,
+                pdf_password: pdfPassword
             });
 
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(8);
-                doc.setTextColor(120);
-                doc.text(`Confidential • Page ${i} of ${pageCount}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 8, {
-                    align: 'center'
-                });
-            }
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+            btn.disabled = true;
 
-            doc.save(`repayment_tracker_${new Date().toISOString().split('T')[0]}.pdf`);
-            if (hasEncryption) {
+            try {
+                const url = `ajax_repayments.php?${params.toString()}`;
+                
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Export failed');
+                
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Export failed');
+                }
+
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = `repayment_tracker_${new Date().toISOString().split('T')[0]}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(downloadUrl);
+                a.remove();
+
                 Swal.fire({
-                    icon: 'info',
+                    icon: 'success',
                     title: 'PDF Exported',
                     text: 'Use your entered password to open the PDF.',
-                    timer: 2200,
+                    timer: 3000,
                     showConfirmButton: false
                 });
-            } else {
+            } catch (error) {
                 Swal.fire({
-                    icon: 'warning',
-                    title: 'PDF Exported Without Encryption',
-                    text: 'Your current jsPDF build does not support password encryption.',
-                    timer: 3200,
+                    icon: 'error',
+                    title: 'Export Failed',
+                    text: error.message
+                });
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        });
+
+        // Export Excel/CSV
+        document.getElementById('exportExcelBtn').addEventListener('click', async function() {
+            const passwordPrompt = await Swal.fire({
+                title: 'Protect Excel Export',
+                text: 'Enter a password to encrypt this Excel/CSV export in a ZIP file.',
+                input: 'password',
+                inputLabel: 'Export Password',
+                inputPlaceholder: 'At least 6 characters',
+                showCancelButton: true,
+                confirmButtonText: 'Export Excel',
+                cancelButtonText: 'Cancel',
+                inputValidator: (value) => (!value || value.trim().length < 6) ? 'Please enter at least 6 characters.' : null
+            });
+
+            if (!passwordPrompt.isConfirmed) return;
+            const pdfPassword = passwordPrompt.value;
+
+            const params = new URLSearchParams({
+                export: 'csv',
+                search: currentFilters.search,
+                status: currentFilters.status,
+                risk: currentFilters.risk,
+                type: currentFilters.type,
+                cardFilter: currentFilters.cardFilter,
+                pdf_password: pdfPassword
+            });
+
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+            btn.disabled = true;
+
+            try {
+                const url = `ajax_repayments.php?${params.toString()}`;
+                
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Export failed');
+                
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Export failed');
+                }
+
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                const extension = pdfPassword ? 'zip' : 'csv';
+                a.download = `repayment_tracker_${new Date().toISOString().split('T')[0]}.${extension}`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(downloadUrl);
+                a.remove();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Excel Exported',
+                    text: pdfPassword ? 'The ZIP file is password protected.' : 'File downloaded successfully.',
+                    timer: 3000,
                     showConfirmButton: false
                 });
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Export Failed',
+                    text: error.message
+                });
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
             }
         });
 
@@ -1302,48 +1331,6 @@ include(__DIR__ . '/../inc/sidebar.php');
             };
         }
 
-        function loadImageAsDataUrl(url) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => {
-                    try {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = img.naturalWidth;
-                        canvas.height = img.naturalHeight;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0);
-                        resolve(canvas.toDataURL('image/jpeg'));
-                    } catch (e) {
-                        reject(e);
-                    }
-                };
-                img.onerror = reject;
-                img.src = url;
-            });
-        }
-
-        async function addCompanyPdfHeader(doc, reportTitle) {
-            doc.setFillColor(20, 83, 45);
-            doc.roundedRect(10, 8, 277, 20, 2, 2, 'F');
-
-            try {
-                const logoData = await loadImageAsDataUrl('../../dist/img/logo.jpg');
-                doc.addImage(logoData, 'JPEG', 13, 10.5, 15, 15);
-            } catch (_) {
-                // no-op: continue without logo if unavailable
-            }
-
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(13);
-            doc.text('Golden Horizons Cooperative', 32, 16);
-            doc.setFontSize(10);
-            doc.text(reportTitle, 32, 22);
-            doc.setFontSize(9);
-            doc.text(`Generated: ${new Date().toLocaleString()}`, 240, 22, {
-                align: 'right'
-            });
-        }
 
         // INITIAL LOAD
         loadData();

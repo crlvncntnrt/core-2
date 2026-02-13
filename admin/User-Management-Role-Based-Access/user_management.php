@@ -30,7 +30,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         background: #f9fafb;
     }
 
-    /* Enhanced Header */
     .page-header {
         background: linear-gradient(135deg, var(--brand-primary) 0%, #047857 100%);
         padding: 2rem;
@@ -53,7 +52,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         margin-top: 0.25rem;
     }
 
-    /* Enhanced Stat Cards */
     .stat-card {
         padding: 1.5rem;
         border-radius: 1rem;
@@ -71,7 +69,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         justify-content: space-between;
     }
 
-    /* Large decorative circle */
     .stat-card::before {
         content: '';
         position: absolute;
@@ -84,7 +81,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         transition: all 0.3s ease;
     }
 
-    /* Small decorative circle */
     .stat-card::after {
         content: '';
         position: absolute;
@@ -113,10 +109,7 @@ include(__DIR__ . '/../inc/sidebar.php');
         transform: translateY(-5px);
     }
 
-    .stat-card-content {
-        position: relative;
-        z-index: 2;
-    }
+    .stat-card-content { position: relative; z-index: 2; }
 
     .stat-card-icon {
         width: 3.5rem;
@@ -155,40 +148,15 @@ include(__DIR__ . '/../inc/sidebar.php');
         gap: 0.25rem;
     }
 
-    /* Card color schemes */
-    .stat-card[data-filter="all"] {
-        --card-color-1: #3b82f6;
-    }
+    .stat-card[data-filter="all"]            { --card-color-1: #3b82f6; }
+    .stat-card[data-filter="Active"]         { --card-color-1: #059669; }
+    .stat-card[data-filter="Inactive"]       { --card-color-1: #ef4444; }
+    .stat-card[data-filter-role="Super Admin"]{ --card-color-1: #3b82f6; }
+    .stat-card[data-filter-role="Admin"]     { --card-color-1: #6b7280; }
+    .stat-card[data-filter-role="Staff"]     { --card-color-1: #f59e0b; }
+    .stat-card[data-filter-role="Client"]    { --card-color-1: #1f2937; }
+    .stat-card[data-filter-role="Distributor"]{ --card-color-1: #8b5cf6; }
 
-    .stat-card[data-filter="Active"] {
-        --card-color-1: #059669;
-    }
-
-    .stat-card[data-filter="Inactive"] {
-        --card-color-1: #ef4444;
-    }
-
-    .stat-card[data-filter-role="Super Admin"] {
-        --card-color-1: #3b82f6;
-    }
-
-    .stat-card[data-filter-role="Admin"] {
-        --card-color-1: #6b7280;
-    }
-
-    .stat-card[data-filter-role="Staff"] {
-        --card-color-1: #f59e0b;
-    }
-
-    .stat-card[data-filter-role="Client"] {
-        --card-color-1: #1f2937;
-    }
-
-    .stat-card[data-filter-role="Distributor"] {
-        --card-color-1: #8b5cf6;
-    }
-
-    /* Enhanced Filter Section */
     .filter-section {
         background: white;
         padding: 1.5rem;
@@ -220,7 +188,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
     }
 
-    /* Active Filters Display */
     .badge-filter {
         font-size: 0.875rem;
         padding: 0.5rem 1rem;
@@ -231,17 +198,9 @@ include(__DIR__ . '/../inc/sidebar.php');
         gap: 0.5rem;
     }
 
-    .badge-filter i {
-        cursor: pointer;
-        opacity: 0.8;
-        transition: opacity 0.2s;
-    }
+    .badge-filter i { cursor: pointer; opacity: 0.8; transition: opacity 0.2s; }
+    .badge-filter i:hover { opacity: 1; }
 
-    .badge-filter i:hover {
-        opacity: 1;
-    }
-
-    /* Enhanced Table */
     .table-card {
         background: white;
         padding: 1.5rem;
@@ -269,11 +228,7 @@ include(__DIR__ . '/../inc/sidebar.php');
         gap: 0.5rem;
     }
 
-    #showingInfo {
-        color: #6b7280;
-        font-size: 0.875rem;
-        font-weight: 500;
-    }
+    #showingInfo { color: #6b7280; font-size: 0.875rem; font-weight: 500; }
 
     .table-wrapper {
         overflow-x: auto;
@@ -281,16 +236,10 @@ include(__DIR__ . '/../inc/sidebar.php');
         border: 1px solid #e5e7eb;
     }
 
-    .table {
-        margin-bottom: 0;
-    }
-
-    .table thead {
-        background: #1f2937 !important;
-    }
-
+    .table { margin-bottom: 0; }
+    .table thead { background: #1f2937 !important; }
     .table thead th {
-        color: #ffffff  !important;
+        color: #ffffff !important;
         font-weight: 700;
         font-size: 0.875rem;
         padding: 1rem 0.75rem;
@@ -324,7 +273,6 @@ include(__DIR__ . '/../inc/sidebar.php');
         border-radius: 0.5rem;
     }
 
-    /* Enhanced Buttons */
     .btn {
         border-radius: 0.5rem;
         font-weight: 600;
@@ -332,52 +280,16 @@ include(__DIR__ . '/../inc/sidebar.php');
         box-shadow: var(--shadow-sm);
     }
 
-    .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-md);
-    }
+    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn:active { transform: translateY(0); }
+    .btn-sm { padding: 0.35rem 0.65rem; font-size: 0.8rem; }
+    .btn-primary   { background: linear-gradient(135deg, var(--brand-primary), #047857); border: none; }
+    .btn-success   { background: linear-gradient(135deg, #10b981, #059669); border: none; }
+    .btn-warning   { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: white; }
+    .btn-danger    { background: linear-gradient(135deg, #ef4444, #dc2626); border: none; }
+    .btn-secondary { background: linear-gradient(135deg, #6b7280, #4b5563); border: none; }
+    .btn-info      { background: linear-gradient(135deg, #3b82f6, #2563eb); border: none; }
 
-    .btn:active {
-        transform: translateY(0);
-    }
-
-    .btn-sm {
-        padding: 0.35rem 0.65rem;
-        font-size: 0.8rem;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, var(--brand-primary), #047857);
-        border: none;
-    }
-
-    .btn-success {
-        background: linear-gradient(135deg, #10b981, #059669);
-        border: none;
-    }
-
-    .btn-warning {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
-        border: none;
-        color: white;
-    }
-
-    .btn-danger {
-        background: linear-gradient(135deg, #ef4444, #dc2626);
-        border: none;
-    }
-
-    .btn-secondary {
-        background: linear-gradient(135deg, #6b7280, #4b5563);
-        border: none;
-    }
-
-    .btn-info {
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
-        border: none;
-    }
-
-    /* Pagination */
     .pagination-wrapper {
         display: flex;
         justify-content: space-between;
@@ -387,9 +299,7 @@ include(__DIR__ . '/../inc/sidebar.php');
         border-top: 2px solid #f3f4f6;
     }
 
-    .pagination {
-        margin-bottom: 0;
-    }
+    .pagination { margin-bottom: 0; }
 
     .pagination .page-link {
         border: 1.5px solid #e5e7eb;
@@ -402,67 +312,32 @@ include(__DIR__ . '/../inc/sidebar.php');
         transition: all 0.2s;
     }
 
-    .pagination .page-link:hover {
-        background: var(--brand-primary);
-        color: white;
-        border-color: var(--brand-primary);
-    }
+    .pagination .page-link:hover { background: var(--brand-primary); color: white; border-color: var(--brand-primary); }
+    .pagination .page-item.active .page-link { background: var(--brand-primary); border-color: var(--brand-primary); color: white; }
+    .pagination .page-item.disabled .page-link { background: #f3f4f6; color: #9ca3af; border-color: #e5e7eb; }
 
-    .pagination .page-item.active .page-link {
-        background: var(--brand-primary);
-        border-color: var(--brand-primary);
-        color: white;
-    }
-
-    .pagination .page-item.disabled .page-link {
-        background: #f3f4f6;
-        color: #9ca3af;
-        border-color: #e5e7eb;
-    }
-
-    /* Modal Enhancements */
-    .modal-content {
-        border-radius: 1rem;
-        border: none;
-        box-shadow: var(--shadow-xl);
-    }
-
+    .modal-content { border-radius: 1rem; border: none; box-shadow: var(--shadow-xl); }
     .modal-header {
         border-bottom: 2px solid #f3f4f6;
         border-radius: 1rem 1rem 0 0;
         background: linear-gradient(135deg, var(--brand-primary), #047857);
         color: white;
     }
+    .modal-footer { border-top: 2px solid #f3f4f6; }
 
-    .modal-footer {
-        border-top: 2px solid #f3f4f6;
-    }
-
-    /* Responsive improvements */
     @media (max-width: 768px) {
-        .page-header {
-            padding: 1.5rem;
-        }
-
-        .stat-card {
-            padding: 1.25rem;
-        }
-
-        .stat-value {
-            font-size: 1.75rem;
-        }
-
-        .filter-section {
-            padding: 1rem;
-        }
+        .page-header { padding: 1.5rem; }
+        .stat-card { padding: 1.25rem; }
+        .stat-value { font-size: 1.75rem; }
+        .filter-section { padding: 1rem; }
     }
 </style>
 
 <div class="main-wrap">
     <main class="main-content" id="main-content">
         <div class="container-fluid py-4">
-            
-            <!-- Enhanced Header -->
+
+            <!-- Header — NO Pending Approvals button -->
             <div class="page-header">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
@@ -471,14 +346,10 @@ include(__DIR__ . '/../inc/sidebar.php');
                     </div>
                     <div class="d-flex gap-2">
                         <?php if (in_array($_SESSION['userdata']['role'], ['Super Admin', 'Admin'])): ?>
-                        <button class="btn btn-sm btn-warning" id="viewApprovalsBtn">
-                            <i class="fas fa-clipboard-check"></i> Pending Approvals
-                            <span class="badge bg-danger ms-1" id="pendingCount" style="display: none;">0</span>
-                        </button>
-                        <?php endif; ?>
                         <button class="btn btn-sm btn-primary" id="addUserBtn">
                             <i class="fas fa-plus"></i> Add User
                         </button>
+                        <?php endif; ?>
                         <button class="btn btn-sm btn-outline-light" id="resetFiltersBtn">
                             <i class="fas fa-redo"></i> Reset Filters
                         </button>
@@ -486,89 +357,65 @@ include(__DIR__ . '/../inc/sidebar.php');
                 </div>
             </div>
 
-            <!-- Enhanced Summary Cards -->
+            <!-- Summary Cards -->
             <div class="row g-4 mb-4">
                 <div class="col-md-6 col-lg-4">
                     <div class="card stat-card" data-filter="all">
                         <div class="stat-card-content">
-                            <div class="stat-card-icon">
-                                <i class="bi bi-people-fill"></i>
-                            </div>
+                            <div class="stat-card-icon"><i class="bi bi-people-fill"></i></div>
                             <div class="stat-title">Total Users</div>
                             <div id="totalUsersCard" class="stat-value">0</div>
-                            <div class="stat-hint">
-                                <i class="bi bi-hand-index"></i> Click to view all
-                            </div>
+                            <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to view all</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="card stat-card" data-filter="Active">
                         <div class="stat-card-content">
-                            <div class="stat-card-icon">
-                                <i class="bi bi-check-circle"></i>
-                            </div>
+                            <div class="stat-card-icon"><i class="bi bi-check-circle"></i></div>
                             <div class="stat-title">Active Users</div>
                             <div id="activeUsersCard" class="stat-value">0</div>
-                            <div class="stat-hint">
-                                <i class="bi bi-hand-index"></i> Click to filter
-                            </div>
+                            <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to filter</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="card stat-card" data-filter="Inactive">
                         <div class="stat-card-content">
-                            <div class="stat-card-icon">
-                                <i class="bi bi-x-circle"></i>
-                            </div>
+                            <div class="stat-card-icon"><i class="bi bi-x-circle"></i></div>
                             <div class="stat-title">Inactive Users</div>
                             <div id="inactiveUsersCard" class="stat-value">0</div>
-                            <div class="stat-hint">
-                                <i class="bi bi-hand-index"></i> Click to filter
-                            </div>
+                            <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to filter</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="card stat-card" data-filter-role="Super Admin">
                         <div class="stat-card-content">
-                            <div class="stat-card-icon">
-                                <i class="bi bi-shield-fill-check"></i>
-                            </div>
+                            <div class="stat-card-icon"><i class="bi bi-shield-fill-check"></i></div>
                             <div class="stat-title">Super Admin</div>
                             <div id="superAdminCard" class="stat-value">0</div>
-                            <div class="stat-hint">
-                                <i class="bi bi-hand-index"></i> Click to filter
-                            </div>
+                            <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to filter</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="card stat-card" data-filter-role="Admin">
                         <div class="stat-card-content">
-                            <div class="stat-card-icon">
-                                <i class="bi bi-person-badge"></i>
-                            </div>
+                            <div class="stat-card-icon"><i class="bi bi-person-badge"></i></div>
                             <div class="stat-title">Admin</div>
                             <div id="adminCard" class="stat-value">0</div>
-                            <div class="stat-hint">
-                                <i class="bi bi-hand-index"></i> Click to filter
-                            </div>
+                            <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to filter</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="card stat-card" data-filter-role="Staff">
                         <div class="stat-card-content">
-                            <div class="stat-card-icon">
-                                <i class="bi bi-person"></i>
-                            </div>
+                            <div class="stat-card-icon"><i class="bi bi-person"></i></div>
                             <div class="stat-title">Staff</div>
                             <div id="staffCard" class="stat-value">0</div>
-                            <div class="stat-hint">
-                                <i class="bi bi-hand-index"></i> Click to filter
-                            </div>
+                            <div class="stat-hint"><i class="bi bi-hand-index"></i> Click to filter</div>
                         </div>
                     </div>
                 </div>
@@ -577,7 +424,7 @@ include(__DIR__ . '/../inc/sidebar.php');
             <!-- Active Filters Display -->
             <div id="activeFilters" class="mb-3"></div>
 
-            <!-- Enhanced Filters Section -->
+            <!-- Filters -->
             <div class="filter-section">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-4">
@@ -591,8 +438,6 @@ include(__DIR__ . '/../inc/sidebar.php');
                             <option value="Super Admin">Super Admin</option>
                             <option value="Admin">Admin</option>
                             <option value="Staff">Staff</option>
-                            <option value="Client">Client</option>
-                            <option value="Distributor">Distributor</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -616,7 +461,7 @@ include(__DIR__ . '/../inc/sidebar.php');
                 </div>
             </div>
 
-            <!-- Enhanced User Table -->
+            <!-- User Table -->
             <div class="table-card">
                 <div class="table-header">
                     <h6 class="table-title">
@@ -641,9 +486,7 @@ include(__DIR__ . '/../inc/sidebar.php');
                             </tr>
                         </thead>
                         <tbody id="userTableBody">
-                            <tr>
-                                <td colspan="8" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -657,11 +500,12 @@ include(__DIR__ . '/../inc/sidebar.php');
                     </nav>
                 </div>
             </div>
+
         </div>
     </main>
 </div>
 
-<!-- User Modal -->
+<!-- Add / Edit User Modal -->
 <div class="modal fade" id="userModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -679,7 +523,7 @@ include(__DIR__ . '/../inc/sidebar.php');
                     <div class="mb-3">
                         <label class="form-label">Password <span class="text-danger" id="passwordRequired">*</span></label>
                         <input type="password" name="password" id="password" class="form-control">
-                        <small class="text-muted" id="passwordHelp" style="display: none;">Leave blank to keep current password.</small>
+                        <small class="text-muted" id="passwordHelp" style="display:none;">Leave blank to keep current password.</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Full Name <span class="text-danger">*</span></label>
@@ -716,195 +560,115 @@ include(__DIR__ . '/../inc/sidebar.php');
     </div>
 </div>
 
-<!-- Send for Approval Modal -->
-<div class="modal fade" id="approvalModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <form id="approvalForm">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-paper-plane me-2"></i>Send Profile for Approval</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="approval_user_id" id="approval_user_id">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i> This profile update will be sent to administrators for approval.
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" name="approval_username" id="approval_username" class="form-control" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" name="approval_full_name" id="approval_full_name" class="form-control" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="approval_email" id="approval_email" class="form-control" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Role</label>
-                        <input type="text" name="approval_role" id="approval_role" class="form-control" readonly>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-paper-plane"></i> Send for Approval
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times"></i> Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Pending Approvals Modal -->
-<div class="modal fade" id="pendingApprovalsModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fas fa-clipboard-check me-2"></i>Pending Approval Requests</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div id="pendingApprovalsList"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <?php include(__DIR__ . '/../inc/footer.php'); ?>
 
 <script>
   const userModal = new bootstrap.Modal(document.getElementById('userModal'));
-  const approvalModal = new bootstrap.Modal(document.getElementById('approvalModal'));
-  const pendingApprovalsModal = new bootstrap.Modal(document.getElementById('pendingApprovalsModal'));
-  
-  let currentUserId = null;
-  let allUsers = [];
-  let filteredUsers = [];
-  let currentPage = 1;
-  let rowsPerPage = 10;
-  
-  // Current user info
-  const currentUserRole = '<?php echo $_SESSION['userdata']['role']; ?>';
-  const isAdmin = ['Super Admin', 'Admin'].includes(currentUserRole);
-  
-  // Filter state
-  let filters = {
-    search: '',
-    role: '',
-    status: ''
-  };
 
+  let currentUserId = null;
+  let allUsers      = [];
+  let filteredUsers = [];
+  let currentPage   = 1;
+  let rowsPerPage   = 10;
+
+  const currentUserRole = '<?php echo addslashes($_SESSION['userdata']['role']); ?>';
+  const isAdmin = ['Super Admin', 'Admin'].includes(currentUserRole);
+
+  let filters = { search: '', role: '', status: '' };
+
+  /* ── helpers ── */
   function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    if (text === null || text === undefined) return '';
+    const d = document.createElement('div');
+    d.textContent = String(text);
+    return d.innerHTML;
   }
 
+  /* ── load users ── */
   function loadUsers() {
-    document.getElementById('userTableBody').innerHTML = '<tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm"></div> Loading...</td></tr>';
-    
+    document.getElementById('userTableBody').innerHTML =
+      '<tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm"></div> Loading...</td></tr>';
+
     fetch('user_action.php?action=list')
-      .then(res => res.json())
+      .then(r => r.json())
       .then(data => {
-        if (data.users) {
-          allUsers = data.users;
-          applyFilters();
-          updateSummaryCards();
-        } else {
-          allUsers = [];
-          filteredUsers = [];
-          renderTable();
-          updateSummaryCards();
-        }
+        allUsers = data.users || [];
+        applyFilters();
+        updateSummaryCards();
       })
-      .catch(err => {
-        console.error('Error loading users:', err);
+      .catch(() => {
         Swal.fire('Error', 'Failed to load users. Please try again.', 'error');
-        document.getElementById('userTableBody').innerHTML = '<tr><td colspan="8" class="text-center text-danger"><i class="bi bi-exclamation-triangle"></i> Error loading users</td></tr>';
+        document.getElementById('userTableBody').innerHTML =
+          '<tr><td colspan="8" class="text-center text-danger"><i class="bi bi-exclamation-triangle"></i> Error loading users</td></tr>';
       });
   }
 
+  /* ── filters ── */
   function applyFilters() {
-    filteredUsers = allUsers.filter(user => {
-      // Search filter
+    filteredUsers = allUsers.filter(u => {
       if (filters.search) {
-        const searchLower = filters.search.toLowerCase();
-        const matchSearch = 
-          user.username.toLowerCase().includes(searchLower) ||
-          user.full_name.toLowerCase().includes(searchLower) ||
-          (user.email && user.email.toLowerCase().includes(searchLower)) ||
-          user.user_id.toString().includes(searchLower);
-        if (!matchSearch) return false;
+        const s = filters.search.toLowerCase();
+        if (![u.username, u.full_name, u.email, String(u.user_id)]
+              .some(v => v && v.toLowerCase().includes(s))) return false;
       }
-      
-      // Role filter
-      if (filters.role && user.role !== filters.role) {
-        return false;
-      }
-      
-      // Status filter
-      if (filters.status && user.status !== filters.status) {
-        return false;
-      }
-      
+      if (filters.role   && u.role   !== filters.role)   return false;
+      if (filters.status && u.status !== filters.status) return false;
       return true;
     });
-    
     currentPage = 1;
     renderTable();
     updateActiveFiltersDisplay();
   }
 
+  /* ── render table ── */
   function renderTable() {
     const tbody = document.getElementById('userTableBody');
     tbody.innerHTML = '';
-    
-    if (filteredUsers.length === 0) {
+
+    if (!filteredUsers.length) {
       tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted"><i class="bi bi-inbox"></i> No users found</td></tr>';
       updatePagination();
       return;
     }
-    
+
     const start = rowsPerPage === 'all' ? 0 : (currentPage - 1) * parseInt(rowsPerPage);
-    const end = rowsPerPage === 'all' ? filteredUsers.length : start + parseInt(rowsPerPage);
-    const pageUsers = filteredUsers.slice(start, end);
-    
-    pageUsers.forEach(u => {
-      const statusBadge = u.status === 'Active' 
-        ? '<span class="badge bg-success">Active</span>' 
+    const end   = rowsPerPage === 'all' ? filteredUsers.length : start + parseInt(rowsPerPage);
+
+    filteredUsers.slice(start, end).forEach(u => {
+      const statusBadge = u.status === 'Active'
+        ? '<span class="badge bg-success">Active</span>'
         : '<span class="badge bg-danger">Inactive</span>';
-      
-      // Action buttons - REMOVED EDIT, ADDED SEND FOR APPROVAL
-      let actionButtons = '';
-      
-      // Send for Approval button (for users to request changes)
-      actionButtons += `
-        <button class="btn btn-sm btn-info sendApprovalBtn" data-id="${u.user_id}" title="Send for Approval">
-          <i class="fas fa-paper-plane"></i>
-        </button>`;
-      
-      // Delete button (admin only)
+
+      let actions = '';
+
+      // Edit button — Super Admin & Admin only
       if (isAdmin) {
-        actionButtons += `
+        actions += `
+          <button class="btn btn-sm btn-warning editBtn" data-id="${u.user_id}" title="Edit User">
+            <i class="fas fa-edit"></i>
+          </button>`;
+      }
+
+      // Delete — Super Admin & Admin only
+      if (isAdmin) {
+        actions += `
           <button class="btn btn-sm btn-danger deleteBtn" data-id="${u.user_id}" title="Delete">
             <i class="fas fa-trash"></i>
           </button>`;
       }
-      
-      // Toggle status button (admin only)
+
+      // Toggle status — Super Admin & Admin only
       if (isAdmin) {
-        actionButtons += `
-          <button class="btn btn-sm btn-secondary toggleBtn" data-id="${u.user_id}" data-status="${u.status}" title="${u.status === 'Active' ? 'Deactivate' : 'Activate'}">
+        actions += `
+          <button class="btn btn-sm btn-secondary toggleBtn"
+            data-id="${u.user_id}" data-status="${u.status}"
+            title="${u.status === 'Active' ? 'Deactivate' : 'Activate'}">
             <i class="fas fa-${u.status === 'Active' ? 'ban' : 'check'}"></i>
           </button>`;
       }
-      
+
+      if (!actions) actions = '<span class="text-muted small">—</span>';
+
       tbody.innerHTML += `
         <tr>
           <td>${escapeHtml(u.user_id)}</td>
@@ -914,550 +678,229 @@ include(__DIR__ . '/../inc/sidebar.php');
           <td><span class="badge bg-info">${escapeHtml(u.role)}</span></td>
           <td>${statusBadge}</td>
           <td>${escapeHtml(u.date_created)}</td>
-          <td class="text-center">${actionButtons}</td>
+          <td class="text-center">${actions}</td>
         </tr>`;
     });
-    
+
     updatePagination();
   }
 
+  /* ── pagination ── */
   function updatePagination() {
-    const totalPages = rowsPerPage === 'all' ? 1 : Math.ceil(filteredUsers.length / parseInt(rowsPerPage));
+    const total      = filteredUsers.length;
+    const totalPages = rowsPerPage === 'all' ? 1 : Math.ceil(total / parseInt(rowsPerPage));
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
-    
-    if (totalPages <= 1) {
-      document.getElementById('showingInfo').textContent = `Showing ${filteredUsers.length} of ${filteredUsers.length} users`;
-      document.getElementById('showingInfoBottom').textContent = `Showing ${filteredUsers.length} of ${filteredUsers.length} users`;
-      return;
-    }
-    
-    // Previous button
-    pagination.innerHTML += `
-      <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-        <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
-      </li>`;
-    
-    // Page numbers
+
+    const start = rowsPerPage === 'all' ? 1 : (currentPage - 1) * parseInt(rowsPerPage) + 1;
+    const end   = rowsPerPage === 'all' ? total : Math.min(currentPage * parseInt(rowsPerPage), total);
+    const info  = total ? `Showing ${start} to ${end} of ${total} users` : 'No users found';
+
+    document.getElementById('showingInfo').textContent       = info;
+    document.getElementById('showingInfoBottom').textContent = info;
+
+    if (totalPages <= 1) return;
+
+    pagination.innerHTML += `<li class="page-item ${currentPage===1?'disabled':''}">
+      <a class="page-link" href="#" data-page="${currentPage-1}">Previous</a></li>`;
+
     for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-        pagination.innerHTML += `
-          <li class="page-item ${i === currentPage ? 'active' : ''}">
-            <a class="page-link" href="#" data-page="${i}">${i}</a>
-          </li>`;
-      } else if (i === currentPage - 3 || i === currentPage + 3) {
-        pagination.innerHTML += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
+      if (i === 1 || i === totalPages || (i >= currentPage-2 && i <= currentPage+2)) {
+        pagination.innerHTML += `<li class="page-item ${i===currentPage?'active':''}">
+          <a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+      } else if (i === currentPage-3 || i === currentPage+3) {
+        pagination.innerHTML += `<li class="page-item disabled"><a class="page-link">…</a></li>`;
       }
     }
-    
-    // Next button
-    pagination.innerHTML += `
-      <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-        <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
-      </li>`;
-    
-    const start = (currentPage - 1) * parseInt(rowsPerPage) + 1;
-    const end = Math.min(currentPage * parseInt(rowsPerPage), filteredUsers.length);
-    const infoText = `Showing ${start} to ${end} of ${filteredUsers.length} users`;
-    document.getElementById('showingInfo').textContent = infoText;
-    document.getElementById('showingInfoBottom').textContent = infoText;
+
+    pagination.innerHTML += `<li class="page-item ${currentPage===totalPages?'disabled':''}">
+      <a class="page-link" href="#" data-page="${currentPage+1}">Next</a></li>`;
   }
 
+  /* ── summary cards ── */
   function updateSummaryCards() {
-    let total = 0, active = 0, inactive = 0;
-    let superAdmin = 0, admin = 0, staff = 0;
-    
+    let total=0, active=0, inactive=0, superAdmin=0, admin=0, staff=0;
     allUsers.forEach(u => {
       total++;
-      if (u.status === 'Active') active++;
-      else inactive++;
-      
-      switch(u.role) {
-        case 'Super Admin': superAdmin++; break;
-        case 'Admin': admin++; break;
-        case 'Staff': staff++; break;
-      }
+      u.status === 'Active' ? active++ : inactive++;
+      if (u.role === 'Super Admin') superAdmin++;
+      else if (u.role === 'Admin')  admin++;
+      else if (u.role === 'Staff')  staff++;
     });
-    
-    document.getElementById('totalUsersCard').innerText = total;
-    document.getElementById('activeUsersCard').innerText = active;
-    document.getElementById('inactiveUsersCard').innerText = inactive;
-    document.getElementById('superAdminCard').innerText = superAdmin;
-    document.getElementById('adminCard').innerText = admin;
-    document.getElementById('staffCard').innerText = staff;
+    document.getElementById('totalUsersCard').innerText   = total;
+    document.getElementById('activeUsersCard').innerText  = active;
+    document.getElementById('inactiveUsersCard').innerText= inactive;
+    document.getElementById('superAdminCard').innerText   = superAdmin;
+    document.getElementById('adminCard').innerText        = admin;
+    document.getElementById('staffCard').innerText        = staff;
   }
 
+  /* ── active filter badges ── */
   function updateActiveFiltersDisplay() {
-    const container = document.getElementById('activeFilters');
     let html = '';
-    
-    if (filters.search) {
-      html += `<span class="badge bg-primary badge-filter">Search: "${escapeHtml(filters.search)}" <i class="fas fa-times" style="cursor: pointer;" onclick="clearFilter('search')"></i></span>`;
-    }
-    if (filters.role) {
-      html += `<span class="badge bg-info badge-filter">Role: ${escapeHtml(filters.role)} <i class="fas fa-times" style="cursor: pointer;" onclick="clearFilter('role')"></i></span>`;
-    }
-    if (filters.status) {
-      html += `<span class="badge bg-success badge-filter">Status: ${escapeHtml(filters.status)} <i class="fas fa-times" style="cursor: pointer;" onclick="clearFilter('status')"></i></span>`;
-    }
-    
-    container.innerHTML = html;
-    
-    // Update card highlights
-    document.querySelectorAll('.stat-card').forEach(card => {
-      card.classList.remove('active-filter');
-    });
-    
-    if (filters.status) {
-      document.querySelector(`[data-filter="${filters.status}"]`)?.classList.add('active-filter');
-    }
-    if (filters.role) {
-      document.querySelector(`[data-filter-role="${filters.role}"]`)?.classList.add('active-filter');
-    }
+    if (filters.search)
+      html += `<span class="badge bg-primary badge-filter">Search: "${escapeHtml(filters.search)}" <i class="fas fa-times" onclick="clearFilter('search')"></i></span>`;
+    if (filters.role)
+      html += `<span class="badge bg-info badge-filter">Role: ${escapeHtml(filters.role)} <i class="fas fa-times" onclick="clearFilter('role')"></i></span>`;
+    if (filters.status)
+      html += `<span class="badge bg-success badge-filter">Status: ${escapeHtml(filters.status)} <i class="fas fa-times" onclick="clearFilter('status')"></i></span>`;
+
+    document.getElementById('activeFilters').innerHTML = html;
+
+    document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active-filter'));
+    if (filters.status) document.querySelector(`[data-filter="${filters.status}"]`)?.classList.add('active-filter');
+    if (filters.role)   document.querySelector(`[data-filter-role="${filters.role}"]`)?.classList.add('active-filter');
   }
 
-  // Load pending approval count (for admins)
-  function loadPendingCount() {
-    if (!isAdmin) return;
-    
-    fetch('approval_action.php?action=get_notification_count')
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'success' && data.count > 0) {
-          document.getElementById('pendingCount').style.display = 'inline';
-          document.getElementById('pendingCount').textContent = data.count;
-        }
-      })
-      .catch(err => console.error('Error loading pending count:', err));
-  }
-
-  // Load pending approvals
-  function loadPendingApprovals() {
-    const container = document.getElementById('pendingApprovalsList');
-    container.innerHTML = '<div class="text-center"><div class="spinner-border"></div><p>Loading...</p></div>';
-    
-    fetch('approval_action.php?action=get_pending')
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'success') {
-          if (data.requests.length === 0) {
-            container.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No pending approval requests</div>';
-            return;
-          }
-          
-          let html = '';
-          data.requests.forEach(req => {
-            const reqData = req.request_data_parsed;
-            html += `
-              <div class="card mb-3">
-                <div class="card-header bg-light">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      <strong>${escapeHtml(req.full_name)}</strong> (${escapeHtml(req.username)})
-                      <small class="text-muted">- ${new Date(req.created_at).toLocaleString()}</small>
-                    </div>
-                    <span class="badge bg-warning">Pending</span>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h6>Requested Changes:</h6>
-                      <ul class="list-unstyled">
-                        <li><strong>Username:</strong> ${escapeHtml(reqData.username || '')}</li>
-                        <li><strong>Full Name:</strong> ${escapeHtml(reqData.full_name || '')}</li>
-                        <li><strong>Email:</strong> ${escapeHtml(reqData.email || '')}</li>
-                        <li><strong>Role:</strong> ${escapeHtml(reqData.role || '')}</li>
-                        <li><strong>Status:</strong> ${escapeHtml(reqData.status || '')}</li>
-                      </ul>
-                    </div>
-                    <div class="col-md-6">
-                      <h6>Current Data:</h6>
-                      <ul class="list-unstyled text-muted">
-                        <li><strong>Username:</strong> ${escapeHtml(req.username)}</li>
-                        <li><strong>Full Name:</strong> ${escapeHtml(req.full_name)}</li>
-                        <li><strong>Email:</strong> ${escapeHtml(req.email)}</li>
-                        <li><strong>Role:</strong> ${escapeHtml(req.current_role)}</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="mt-3">
-                    <button class="btn btn-success btn-sm approveBtn" data-id="${req.request_id}">
-                      <i class="fas fa-check"></i> Approve
-                    </button>
-                    <button class="btn btn-danger btn-sm rejectBtn" data-id="${req.request_id}">
-                      <i class="fas fa-times"></i> Reject
-                    </button>
-                  </div>
-                </div>
-              </div>`;
-          });
-          container.innerHTML = html;
-          
-          // Add event listeners
-          container.querySelectorAll('.approveBtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-              approveRequest(this.dataset.id);
-            });
-          });
-          
-          container.querySelectorAll('.rejectBtn').forEach(btn => {
-            btn.addEventListener('click', function() {
-              rejectRequest(this.dataset.id);
-            });
-          });
-        }
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        container.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Error loading approvals</div>';
-      });
-  }
-
-  // Approve request
-  function approveRequest(requestId) {
-    Swal.fire({
-      title: 'Approve Request?',
-      input: 'textarea',
-      inputLabel: 'Review Notes (optional)',
-      inputPlaceholder: 'Enter any notes about this approval...',
-      showCancelButton: true,
-      confirmButtonText: 'Approve',
-      confirmButtonColor: '#10b981'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const fd = new FormData();
-        fd.append('action', 'approve');
-        fd.append('request_id', requestId);
-        fd.append('review_notes', result.value || '');
-        
-        fetch('approval_action.php', {
-          method: 'POST',
-          body: fd
-        })
-        .then(res => res.json())
-        .then(resp => {
-          if (resp.status === 'success') {
-            Swal.fire('Approved!', resp.msg, 'success');
-            loadPendingApprovals();
-            loadPendingCount();
-            loadUsers();
-          } else {
-            Swal.fire('Error', resp.msg, 'error');
-          }
-        })
-        .catch(err => {
-          console.error('Error:', err);
-          Swal.fire('Error', 'Failed to approve request', 'error');
-        });
-      }
-    });
-  }
-
-  // Reject request
-  function rejectRequest(requestId) {
-    Swal.fire({
-      title: 'Reject Request?',
-      input: 'textarea',
-      inputLabel: 'Reason for Rejection',
-      inputPlaceholder: 'Enter reason for rejection...',
-      showCancelButton: true,
-      confirmButtonText: 'Reject',
-      confirmButtonColor: '#ef4444',
-      inputValidator: (value) => {
-        if (!value) {
-          return 'Please provide a reason for rejection'
-        }
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const fd = new FormData();
-        fd.append('action', 'reject');
-        fd.append('request_id', requestId);
-        fd.append('review_notes', result.value);
-        
-        fetch('approval_action.php', {
-          method: 'POST',
-          body: fd
-        })
-        .then(res => res.json())
-        .then(resp => {
-          if (resp.status === 'success') {
-            Swal.fire('Rejected!', resp.msg, 'success');
-            loadPendingApprovals();
-            loadPendingCount();
-          } else {
-            Swal.fire('Error', resp.msg, 'error');
-          }
-        })
-        .catch(err => {
-          console.error('Error:', err);
-          Swal.fire('Error', 'Failed to reject request', 'error');
-        });
-      }
-    });
-  }
-
-  window.clearFilter = function(filterType) {
-    if (filterType === 'search') {
-      filters.search = '';
-      document.getElementById('searchInput').value = '';
-    } else if (filterType === 'role') {
-      filters.role = '';
-      document.getElementById('roleFilter').value = '';
-    } else if (filterType === 'status') {
-      filters.status = '';
-      document.getElementById('statusFilter').value = '';
-    }
+  window.clearFilter = function(type) {
+    if (type === 'search') { filters.search=''; document.getElementById('searchInput').value=''; }
+    if (type === 'role')   { filters.role='';   document.getElementById('roleFilter').value=''; }
+    if (type === 'status') { filters.status=''; document.getElementById('statusFilter').value=''; }
     applyFilters();
-  }
+  };
 
-  // Event Listeners
-  document.getElementById('searchInput').addEventListener('input', function() {
-    filters.search = this.value;
-    applyFilters();
-  });
+  /* ── event listeners ── */
+  document.getElementById('searchInput').addEventListener('input', function(){ filters.search=this.value; applyFilters(); });
+  document.getElementById('roleFilter').addEventListener('change', function(){ filters.role=this.value; applyFilters(); });
+  document.getElementById('statusFilter').addEventListener('change', function(){ filters.status=this.value; applyFilters(); });
+  document.getElementById('rowsPerPage').addEventListener('change', function(){ rowsPerPage=this.value; currentPage=1; renderTable(); });
 
-  document.getElementById('roleFilter').addEventListener('change', function() {
-    filters.role = this.value;
-    applyFilters();
-  });
-
-  document.getElementById('statusFilter').addEventListener('change', function() {
-    filters.status = this.value;
-    applyFilters();
-  });
-
-  document.getElementById('rowsPerPage').addEventListener('change', function() {
-    rowsPerPage = this.value;
-    currentPage = 1;
-    renderTable();
-  });
-
-  document.getElementById('pagination').addEventListener('click', function(e) {
+  document.getElementById('pagination').addEventListener('click', function(e){
     e.preventDefault();
-    if (e.target.tagName === 'A' && e.target.dataset.page) {
+    if (e.target.tagName==='A' && e.target.dataset.page) {
       currentPage = parseInt(e.target.dataset.page);
       renderTable();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({top:0, behavior:'smooth'});
     }
   });
 
-  document.getElementById('resetFiltersBtn').addEventListener('click', function() {
-    filters = { search: '', role: '', status: '' };
-    document.getElementById('searchInput').value = '';
-    document.getElementById('roleFilter').value = '';
-    document.getElementById('statusFilter').value = '';
+  document.getElementById('resetFiltersBtn').addEventListener('click', function(){
+    filters = {search:'', role:'', status:''};
+    document.getElementById('searchInput').value='';
+    document.getElementById('roleFilter').value='';
+    document.getElementById('statusFilter').value='';
     applyFilters();
   });
 
-  // View pending approvals button
-  if (isAdmin) {
-    document.getElementById('viewApprovalsBtn').addEventListener('click', function() {
-      loadPendingApprovals();
-      pendingApprovalsModal.show();
-    });
-  }
-
-  // Clickable summary cards
+  /* stat cards clickable */
   document.querySelectorAll('.stat-card').forEach(card => {
-    card.addEventListener('click', function() {
-      const filterType = this.dataset.filter;
-      const filterRole = this.dataset.filterRole;
-      
-      if (filterType) {
-        if (filterType === 'all') {
-          filters.status = '';
-          document.getElementById('statusFilter').value = '';
-        } else {
-          filters.status = filterType;
-          document.getElementById('statusFilter').value = filterType;
-        }
+    card.addEventListener('click', function(){
+      const ft = this.dataset.filter;
+      const fr = this.dataset.filterRole;
+      if (ft) {
+        filters.status = ft==='all' ? '' : ft;
+        document.getElementById('statusFilter').value = filters.status;
       }
-      
-      if (filterRole) {
-        filters.role = filterRole;
-        document.getElementById('roleFilter').value = filterRole;
+      if (fr) {
+        filters.role = fr;
+        document.getElementById('roleFilter').value = fr;
       }
-      
       applyFilters();
     });
   });
 
-  document.getElementById('addUserBtn').addEventListener('click', () => {
-    currentUserId = null;
-    document.getElementById('userForm').reset();
-    document.getElementById('userModalTitle').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add User';
-    document.getElementById('password').setAttribute('required', 'required');
-    document.getElementById('passwordRequired').style.display = 'inline';
-    document.getElementById('passwordHelp').style.display = 'none';
-    document.getElementById('role').value = '';
-    userModal.show();
-  });
+  /* ── Add User ── */
+  if (isAdmin) {
+    document.getElementById('addUserBtn').addEventListener('click', () => {
+      currentUserId = null;
+      document.getElementById('userForm').reset();
+      document.getElementById('userModalTitle').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add User';
+      document.getElementById('password').setAttribute('required','required');
+      document.getElementById('passwordRequired').style.display = 'inline';
+      document.getElementById('passwordHelp').style.display = 'none';
+      document.getElementById('role').value = '';
+      document.getElementById('status').checked = true;
+      userModal.show();
+    });
+  }
 
-  document.getElementById('userForm').addEventListener('submit', function(e) {
+  /* ── Submit Add/Edit form ── */
+  document.getElementById('userForm').addEventListener('submit', function(e){
     e.preventDefault();
     const fd = new FormData(this);
     fd.append('action', currentUserId ? 'edit' : 'add');
     fd.append('status', document.getElementById('status').checked ? 'Active' : 'Inactive');
     if (currentUserId) fd.append('user_id', currentUserId);
-    
-    fetch('user_action.php', {
-      method: 'POST',
-      body: fd
-    })
-    .then(res => res.json())
-    .then(resp => {
-      if (resp.status === 'success') {
-        Swal.fire('Success', resp.msg, 'success');
-        userModal.hide();
-        loadUsers();
-      } else {
-        Swal.fire('Error', resp.msg, 'error');
-      }
-    })
-    .catch(err => {
-      console.error('Error:', err);
-      Swal.fire('Error', 'Failed to save user. Please try again.', 'error');
-    });
-  });
 
-  // Send for Approval Form
-  document.getElementById('approvalForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const userId = document.getElementById('approval_user_id').value;
-    const username = document.getElementById('approval_username').value;
-    const fullName = document.getElementById('approval_full_name').value;
-    const email = document.getElementById('approval_email').value;
-    const role = document.getElementById('approval_role').value;
-    
-    const requestData = JSON.stringify({
-      username: username,
-      full_name: fullName,
-      email: email,
-      role: role,
-      status: 'Active'
-    });
-    
-    const fd = new FormData();
-    fd.append('action', 'submit_request');
-    fd.append('user_id', userId);
-    fd.append('request_type', 'profile_update');
-    fd.append('request_data', requestData);
-    
-    fetch('approval_action.php', {
-      method: 'POST',
-      body: fd
-    })
-    .then(res => res.json())
-    .then(resp => {
-      if (resp.status === 'success') {
-        Swal.fire('Success!', resp.msg, 'success');
-        approvalModal.hide();
-        if (isAdmin) {
-          loadPendingCount();
-        }
-      } else {
-        Swal.fire('Error', resp.msg, 'error');
-      }
-    })
-    .catch(err => {
-      console.error('Error:', err);
-      Swal.fire('Error', 'Failed to submit approval request', 'error');
-    });
-  });
-
-  document.getElementById('userTableBody').addEventListener('click', function(e) {
-    const btn = e.target.closest('button');
-    if (!btn) return;
-    
-    const id = btn.dataset.id;
-    
-    // Send for Approval button
-    if (btn.classList.contains('sendApprovalBtn')) {
-      fetch('user_action.php?action=get&id=' + id)
-        .then(res => res.json())
-        .then(u => {
-          document.getElementById('approval_user_id').value = u.user_id;
-          document.getElementById('approval_username').value = u.username;
-          document.getElementById('approval_full_name').value = u.full_name;
-          document.getElementById('approval_email').value = u.email || '';
-          document.getElementById('approval_role').value = u.role;
-          approvalModal.show();
-        })
-        .catch(err => {
-          console.error('Error:', err);
-          Swal.fire('Error', 'Failed to load user data.', 'error');
-        });
-    }
-    
-    if (btn.classList.contains('deleteBtn')) {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'This action cannot be undone!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!',
-        cancelButtonText: 'Cancel'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const fd = new FormData();
-          fd.append('action', 'delete');
-          fd.append('id', id);
-          fetch('user_action.php', {
-            method: 'POST',
-            body: fd
-          })
-          .then(res => res.json())
-          .then(resp => {
-            if (resp.status === 'success') {
-              Swal.fire('Deleted!', resp.msg, 'success');
-              loadUsers();
-            } else {
-              Swal.fire('Error', resp.msg, 'error');
-            }
-          })
-          .catch(err => {
-            console.error('Error:', err);
-            Swal.fire('Error', 'Failed to delete user.', 'error');
-          });
-        }
-      });
-    }
-    
-    if (btn.classList.contains('toggleBtn')) {
-      const status = btn.dataset.status === 'Active' ? 'Inactive' : 'Active';
-      const fd = new FormData();
-      fd.append('action', 'toggle_status');
-      fd.append('id', id);
-      fd.append('status', status);
-      fetch('user_action.php', {
-        method: 'POST',
-        body: fd
-      })
-      .then(res => res.json())
+    fetch('user_action.php', { method:'POST', body:fd })
+      .then(r => r.json())
       .then(resp => {
         if (resp.status === 'success') {
           Swal.fire('Success', resp.msg, 'success');
+          userModal.hide();
           loadUsers();
         } else {
           Swal.fire('Error', resp.msg, 'error');
         }
       })
-      .catch(err => {
-        console.error('Error:', err);
-        Swal.fire('Error', 'Failed to update user status.', 'error');
+      .catch(() => Swal.fire('Error', 'Failed to save user. Please try again.', 'error'));
+  });
+
+  /* ── Table button clicks ── */
+  document.getElementById('userTableBody').addEventListener('click', function(e){
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const id = btn.dataset.id;
+
+    /* Edit */
+    if (btn.classList.contains('editBtn')) {
+      fetch('user_action.php?action=get&id=' + id)
+        .then(r => r.json())
+        .then(u => {
+          if (u.status === 'error') { Swal.fire('Error', u.msg, 'error'); return; }
+          currentUserId = u.user_id;
+          document.getElementById('user_id').value     = u.user_id;
+          document.getElementById('username').value    = u.username;
+          document.getElementById('full_name').value   = u.full_name;
+          document.getElementById('email').value       = u.email || '';
+          document.getElementById('role').value        = u.role;
+          document.getElementById('status').checked    = u.status === 'Active';
+          document.getElementById('password').value    = '';
+          document.getElementById('password').removeAttribute('required');
+          document.getElementById('passwordRequired').style.display = 'none';
+          document.getElementById('passwordHelp').style.display     = 'inline';
+          document.getElementById('userModalTitle').innerHTML =
+            '<i class="fas fa-edit me-2"></i>Edit User';
+          userModal.show();
+        })
+        .catch(() => Swal.fire('Error','Failed to load user data.','error'));
+    }
+
+    /* Delete */
+    if (btn.classList.contains('deleteBtn')) {
+      Swal.fire({
+        title:'Are you sure?', text:'This action cannot be undone!',
+        icon:'warning', showCancelButton:true,
+        confirmButtonColor:'#d33', confirmButtonText:'Yes, delete!', cancelButtonText:'Cancel'
+      }).then(res => {
+        if (!res.isConfirmed) return;
+        const fd = new FormData();
+        fd.append('action','delete'); fd.append('id',id);
+        fetch('user_action.php',{method:'POST',body:fd})
+          .then(r=>r.json())
+          .then(resp => {
+            if (resp.status==='success') { Swal.fire('Deleted!',resp.msg,'success'); loadUsers(); }
+            else Swal.fire('Error',resp.msg,'error');
+          })
+          .catch(() => Swal.fire('Error','Failed to delete user.','error'));
       });
+    }
+
+    /* Toggle status */
+    if (btn.classList.contains('toggleBtn')) {
+      const newStatus = btn.dataset.status === 'Active' ? 'Inactive' : 'Active';
+      const fd = new FormData();
+      fd.append('action','toggle_status'); fd.append('id',id); fd.append('status',newStatus);
+      fetch('user_action.php',{method:'POST',body:fd})
+        .then(r=>r.json())
+        .then(resp => {
+          if (resp.status==='success') { Swal.fire('Success',resp.msg,'success'); loadUsers(); }
+          else Swal.fire('Error',resp.msg,'error');
+        })
+        .catch(() => Swal.fire('Error','Failed to update user status.','error'));
     }
   });
 
-  // Initialize
+  /* ── Init ── */
   loadUsers();
-  if (isAdmin) {
-    loadPendingCount();
-    // Auto-refresh pending count every 30 seconds
-    setInterval(loadPendingCount, 30000);
-  }
 </script>

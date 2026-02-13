@@ -130,6 +130,16 @@ error_log("Successfully uploaded file for user $user_id: $filepath");
 
 // Update database
 $photo_url = '/uploads/profiles/' . $filename;
+$skip_db = isset($_POST['skip_db']) || isset($_GET['skip_db']);
+
+if ($skip_db) {
+    echo json_encode([
+        'success' => true,
+        'photo_url' => $photo_url,
+        'message' => 'Profile photo uploaded (pending approval)'
+    ]);
+    exit;
+}
 
 try {
     $db = new DBConnection();

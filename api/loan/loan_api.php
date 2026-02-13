@@ -406,6 +406,62 @@ function calculateTotalAmountDue($conn, $principal, $interestRate, $loanTerm, $l
     }
 }
 
+// ----------------------------------------------------------------------
+// Load TCPDF only when needed to avoid fatal errors if library is missing
+// ----------------------------------------------------------------------
+function loadTCPDF()
+{
+    if (class_exists('TCPDF')) return true;
+
+    $paths = [
+        __DIR__ . '/../../vendor/autoload.php',
+        __DIR__ . '/../../vendor/tecnickcom/tcpdf/tcpdf.php',
+        __DIR__ . '/../../libs/tcpdf/tcpdf.php',
+        __DIR__ . '/../libs/tcpdf/tcpdf.php',
+        __DIR__ . '/libs/tcpdf/tcpdf.php'
+    ];
+
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            require_once($path);
+            if (class_exists('TCPDF')) return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Send PDF as clean binary download to avoid corruption.
+ */
+function outputPdfDownload($pdf, string $filename): void
+{
+    // Clear any previous output buffers to avoid corrupting PDF binary
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
+    
+    // Ensure no output happens before or after this
+    ob_start();
+    $binary = $pdf->Output($filename, 'S');
+    ob_end_clean();
+
+    if ($binary === '') {
+        throw new Exception('Generated PDF content is empty.');
+    }
+
+    if (!headers_sent()) {
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . strlen($binary));
+        header('Cache-Control: private, max-age=0, must-revalidate');
+        header('Pragma: public');
+    }
+
+    echo $binary;
+    exit;
+}
+
 // ─────────────────────────────────────────────
 // GET PARAMETERS
 // ─────────────────────────────────────────────
@@ -434,6 +490,176 @@ $response = [
 ];
 
 try {
+    // ═══════════════════════════════════════════════════════════════
+    // HANDLE PDF EXPORT
+    // ═══════════════════════════════════════════════════════════════
+    $export = isset($_GET['export']) ? trim($_GET['export']) : '';
+    $pdfPassword = isset($_GET['pdf_password']) ? trim($_GET['pdf_password']) : '';
+
+    if ($export === 'pdf') {
+        if (strlen($pdfPassword) < 6) {
+            throw new Exception("PDF password must be at least 6 characters.");
+        }
+
+        if (!loadTCPDF()) {
+            throw new Exception("TCPDF library not found.");
+        }
+
+        if (!class_exists('LoanExportPDF')) {
+            class LoanExportPDF extends TCPDF
+            {
+                public function Header(): void
+                {
+                    $leftMargin = 10;
+                    $top = 8;
+                    $width = 277;
+                    $this->SetFillColor(20, 83, 45);
+                    $this->SetDrawColor(20, 83, 45);
+                    $this->RoundedRect($leftMargin, $top, $width, 20, 2, '1111', 'FD');
+                    $logoPath = __DIR__ . '/../../dist/img/logo.jpg';
+                    if (is_file($logoPath)) {
+                        $this->Image($logoPath, $leftMargin + 3, $top + 2, 16, 16, 'JPG');
+                    }
+                    $this->SetTextColor(255, 255, 255);
+                    $this->SetXY($leftMargin + 22, $top + 4);
+                    $this->SetFont('helvetica', 'B', 13);
+                    $this->Cell(0, 6, 'Golden Horizons Cooperative', 0, 1, 'L');
+                    $this->SetX($leftMargin + 22);
+                    $this->SetFont('helvetica', '', 9);
+                    $this->Cell(0, 5, 'Loan Portfolio & Risk Management Report', 0, 0, 'L');
+                }
+
+                public function Footer(): void
+                {
+                    $this->SetY(-12);
+                    $this->SetFont('helvetica', 'I', 8);
+                    $this->SetTextColor(20, 83, 45);
+                    $this->Cell(0, 8, 'Confidential • Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, 0, 'C');
+                }
+            }
+        }
+
+        // Build Query for Export (No Limit)
+        $where_conditions_pdf = [];
+        if ($cardFilter === 'active') {
+            $where_conditions_pdf[] = "l.status = 'Active'";
+        } elseif ($cardFilter === 'overdue' && $table_exists) {
+            $where_conditions_pdf[] = "EXISTS (SELECT 1 FROM loan_schedule ls WHERE (ls.loan_code = l.loan_code OR (ls.loan_code IS NULL AND ls.loan_id = l.loan_id)) AND (ls.status = 'Overdue' OR (ls.due_date < CURDATE() AND ls.amount_paid < ls.amount_due)))";
+        } elseif ($cardFilter === 'defaulted') {
+            $where_conditions_pdf[] = "l.status = 'Defaulted'";
+        }
+        if ($search !== '') {
+            $s = $conn->real_escape_string($search);
+            $where_conditions_pdf[] = "(l.loan_id LIKE '%$s%' OR l.loan_code LIKE '%$s%' OR m.full_name LIKE '%$s%' OR l.loan_type LIKE '%$s%')";
+        }
+        if ($status !== '') {
+            $st = $conn->real_escape_string($status);
+            $where_conditions_pdf[] = "l.status = '$st'";
+        }
+        if ($type !== '') {
+            $ty = $conn->real_escape_string($type);
+            $where_conditions_pdf[] = "l.loan_type = '$ty'";
+        }
+        $where_clause_pdf = !empty($where_conditions_pdf) ? 'WHERE ' . implode(' AND ', $where_conditions_pdf) : '';
+
+        $sql_pdf = "SELECT l.*, COALESCE(m.full_name, 'Unknown') AS member_name FROM loan_portfolio l LEFT JOIN members m ON m.member_id = l.member_id $where_clause_pdf ORDER BY l.loan_id DESC";
+        $result_pdf = $conn->query($sql_pdf);
+
+        $pdf = new LoanExportPDF('L', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator('Loan System');
+        $pdf->SetAuthor('Admin');
+        $pdf->SetTitle('Loan Portfolio Report');
+
+        $ownerPassword = md5(uniqid(mt_rand(), true));
+        $pdf->SetProtection(['print', 'copy'], $pdfPassword, $ownerPassword, 0, null);
+
+        $pdf->SetMargins(10, 32, 10);
+        $pdf->SetAutoPageBreak(TRUE, 15);
+        $pdf->AddPage();
+
+        $pdf->SetTextColor(34, 34, 34);
+        $pdf->SetFillColor(220, 252, 231);
+
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->Cell(0, 7, 'Generated: ' . date('Y-m-d H:i:s'), 0, 1, 'L');
+        $pdf->Ln(3);
+
+        $html = '
+            <style>
+                table { border-collapse: collapse; }
+                th { background-color: #14532d; color: #ffffff; font-size: 8px; font-weight: bold; padding: 4px; border: 1px solid #166534; text-align: center; }
+                td { font-size: 7px; color: #1f2937; padding: 4px; border: 1px solid #bbf7d0; }
+                .row-light { background-color: #f0fdf4; }
+                .row-alt { background-color: #dcfce7; }
+                .center { text-align: center; }
+            </style>
+            <table width="100%" cellpadding="3">
+                <thead>
+                    <tr>
+                        <th width="7%">Code</th>
+                        <th width="15%">Member</th>
+                        <th width="10%">Type</th>
+                        <th width="10%">Amount</th>
+                        <th width="5%">Rate</th>
+                        <th width="5%">Term</th>
+                        <th width="10%">Total Due</th>
+                        <th width="10%">Start</th>
+                        <th width="10%">End</th>
+                        <th width="7%">Status</th>
+                        <th width="11%">Risk</th>
+                    </tr>
+                </thead>
+                <tbody>';
+
+        $n = 0;
+        if ($result_pdf && $result_pdf->num_rows > 0) {
+            while ($row = $result_pdf->fetch_assoc()) {
+                $rowClass = ($n % 2 === 0) ? 'row-alt' : 'row-light';
+                
+                // Risk Calc
+                $overdue_count = 0;
+                if ($table_exists) {
+                   $lc = $row['loan_code'];
+                   $li = $row['loan_id'];
+                   if (!empty($lc)) {
+                       $qc = "SELECT COUNT(*) AS overdue_count FROM loan_schedule WHERE loan_code = '$lc' AND (status = 'Overdue' OR (due_date < CURDATE() AND amount_paid < amount_due))";
+                   } else {
+                       $qc = "SELECT COUNT(*) AS overdue_count FROM loan_schedule WHERE loan_id = $li AND (status = 'Overdue' OR (due_date < CURDATE() AND amount_paid < amount_due))";
+                   }
+                   $rc = $conn->query($qc);
+                   if ($rowc = $rc->fetch_assoc()) $overdue_count = (int)$rowc['overdue_count'];
+                }
+                $risk_level = 'Low';
+                if ($row['status'] === 'Defaulted' || $overdue_count >= 2) $risk_level = 'High';
+                elseif ($overdue_count === 1) $risk_level = 'Medium';
+                
+                $am = calculateTotalAmountDue($conn, $row['principal_amount'], $row['interest_rate'], $row['loan_term'], $row['loan_code']);
+
+                $html .= '<tr class="' . $rowClass . '">'
+                    . '<td class="center">' . ($row['loan_code'] ?: 'OLD-' . $row['loan_id']) . '</td>'
+                    . '<td>' . htmlspecialchars($row['member_name'], ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td>' . htmlspecialchars($row['loan_type'], ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td class="center">₱' . number_format($row['principal_amount'], 2) . '</td>'
+                    . '<td class="center">' . $row['interest_rate'] . '%</td>'
+                    . '<td class="center">' . $row['loan_term'] . 'm</td>'
+                    . '<td class="center">₱' . number_format($am['total_amount_due'], 2) . '</td>'
+                    . '<td class="center">' . $row['start_date'] . '</td>'
+                    . '<td class="center">' . $row['end_date'] . '</td>'
+                    . '<td class="center">' . $row['status'] . '</td>'
+                    . '<td class="center">' . $risk_level . '</td>'
+                    . '</tr>';
+                $n++;
+            }
+        } else {
+            $html .= '<tr class="row-light"><td colspan="11" class="center">No records found.</td></tr>';
+        }
+
+        $html .= '</tbody></table>';
+        $pdf->writeHTML($html, true, false, true, false, '');
+        
+        outputPdfDownload($pdf, 'loan_portfolio_report_' . date('Y-m-d_His') . '.pdf');
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // HANDLE FORCE SYNC
     // ═══════════════════════════════════════════════════════════════

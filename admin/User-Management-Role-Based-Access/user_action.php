@@ -211,8 +211,13 @@ switch ($action) {
                     json_out(['status' => 'error', 'msg' => 'Invalid user ID']);
                 }
                 
-                // Prevent editing own role/status if not Super Admin
+                // Prevent editing own profile if not Super Admin (force use of approval system)
                 if ($id == $current_user_id && $current_role !== 'Super Admin') {
+                    json_out(['status' => 'error', 'msg' => 'Please use the "Edit Profile" option in your account menu to update your information. Profile changes require administrator approval.']);
+                }
+                
+                // Extra check for existing role/status protection if it was a Super Admin (redundant but safe)
+                if ($id == $current_user_id && $current_role === 'Super Admin') {
                     $stmt = $conn->prepare("SELECT role, status FROM users WHERE user_id=?");
                     $stmt->bind_param('i', $id);
                     $stmt->execute();
@@ -293,7 +298,7 @@ switch ($action) {
         $id = intval($_POST['id'] ?? 0);
         if ($id <= 0) json_out(['status' => 'error', 'msg' => 'Invalid user ID']);
         
-        // Prevent self-deletion
+        // Prevent self-deletion / Force deactivation via approval for others
         if ($id == $current_user_id) {
             json_out(['status' => 'error', 'msg' => 'You cannot delete your own account']);
         }
